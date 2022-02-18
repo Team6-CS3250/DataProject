@@ -2,7 +2,7 @@ import Operations
 import PyQt5.QtWidgets
 import sys
 
-class databaseWarehouse(Operations):
+class databaseWarehouse():
     """
     This class will be the backend for the GUI, Creating
     the Interface for the Database. Using the methods from
@@ -19,7 +19,11 @@ class databaseWarehouse(Operations):
     """
 
     def __init__(self):
-        app = PyQt5.QtWidgets.QApplication(sys.argv)
-        window = PyQt5.QtWidgets.QWidget()
+        self.app = PyQt5.QtWidgets.QApplication(sys.argv)
+        self.window = PyQt5.QtWidgets.QWidget()
+        self.window.show()
 
-        pass
+    def run(self):
+        self.app.exec()
+
+        
