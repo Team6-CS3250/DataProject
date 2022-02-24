@@ -1,6 +1,7 @@
 import Operations
-import PyQt5.QtWidgets
 import sys
+from tkinter import *
+from tkinter import ttk
 
 class databaseWarehouse():
     """
@@ -19,11 +20,12 @@ class databaseWarehouse():
     """
 
     def __init__(self):
-        self.app = PyQt5.QtWidgets.QApplication(sys.argv)
-        self.window = PyQt5.QtWidgets.QWidget()
-        self.window.show()
+        self.base = Tk()
+        self.frm = ttk.Frame(self.base, padding=10)
+        ttk.Label(self.base, text="Hello World!").grid(column=0, row=0)
+        ttk.Button(self.base, text="Quit", command=self.base.destroy).grid(column=1, row=0)
 
     def run(self):
-        self.app.exec()
+        self.base.mainloop()
 
         
