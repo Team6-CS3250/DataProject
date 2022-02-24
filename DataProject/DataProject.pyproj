@@ -31,9 +31,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Ref\" />
-  </ItemGroup>
-  <ItemGroup>
     <Interpreter Include="env\">
       <Id>env</Id>
       <Version>3.7</Version>
