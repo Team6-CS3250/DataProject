@@ -1,3 +1,4 @@
+from msilib.schema import Error
 import sqlite3
 
 class operations():
@@ -5,13 +6,21 @@ class operations():
     The Operations File containes all of the operator classes to interact with
     the data in the Database, with callable functions for the Gui to use.
     """
+    
 
     def __init__(self, database):
     # On call from GUI, this initaits by connecting to the DB.
-        database = sqlite3.connect("")
-        current = database.cursor()
-
-        return
+        database = None
+        try:
+            database = sqlite3.connect(db_File)
+            print(sqlite3.version)
+        # current = database.cursor()
+        except Error as e:
+            print(e)
+        finally:
+            if database:
+                database.close()
+        return database
 
     def saveChanges(self):
     # On call asks if you would like to save changes, editiing the table.
