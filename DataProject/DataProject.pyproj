@@ -5,13 +5,15 @@
     <ProjectGuid>5529818d-c37e-4e55-9c5a-4cc0e1f47f05</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <StartupFile>Test_Runfile.py</StartupFile>
-    <SearchPath>Ref</SearchPath>
+    <SearchPath>
+    </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>DataProject</Name>
     <RootNamespace>DataProject</RootNamespace>
     <TestFramework>unittest</TestFramework>
-    <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>Global|PythonCore|3.7</InterpreterId>
+    <IsWindowsApplication>False</IsWindowsApplication>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,6 +24,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CRUD_Operations.py" />
     <Compile Include="DatabaseWarehouse.py" />
     <Compile Include="Test_Runfile.py">
       <SubType>Code</SubType>
@@ -40,6 +43,9 @@
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>X64</Architecture>
     </Interpreter>
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|3.7" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
