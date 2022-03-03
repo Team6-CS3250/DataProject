@@ -32,10 +32,13 @@ class Ops():
 
     def formatTable(self):
         """Fixer method that is to format the table, use only if the table is not in the DB. """
-
+        data = pd.read_csv('customer_orders_team6.csv')
+        df = pd.DataFrame(data)
         cur = self.database.cursor()
         cur.execute("CREATE TABLE IF NOT EXISTS customer_orders(date TEXT, cust_email TEXT, cust_location INTEGER, product_id TEXT, product_quantity INTEGER)")
+        data.to_sql('customer_orders', self.database, if_exists='replace', index=False)
         self.database.commit()
+
 
 
     def viewTable(self):
