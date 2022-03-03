@@ -1,4 +1,6 @@
 import sqlite3
+import pandas as pd
+import Operations
 from sqlite3 import Error
 
 class CRUD_operations():
@@ -32,12 +34,14 @@ class CRUD_operations():
     def read():
     # This functions calls functions from the operations 
     # class to perform the desired read function
-
+        pass
 
     def update():
     # This function calls functions from the operations
     # class to perform the desired update function
+        pass
 
     def delete():
     # This function calls functions from teh operations
     # class to perform the desired delete function
+        pass
