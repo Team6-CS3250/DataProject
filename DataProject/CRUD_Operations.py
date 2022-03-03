@@ -1,5 +1,6 @@
 # This is not a neccessary class, but the methods within can fill
 # in the gaps elsewhere in the project where these operations are necessary.
+from dataclasses import dataclass
 import sqlite3
 from sqlite3 import Error
 
@@ -20,7 +21,7 @@ class CRUD_operations(Operations):
         # Determine if database is empty or not and proceed thusly
         if database == None:
             # create query
-            query = """CREATE TABLE ENTRY(PRODUCT_ID CHAR(12) PRIMARY KEY NOT NULL,
+            query = """CREATE TABLE INVENTORY(PRODUCT_ID CHAR(12) PRIMARY KEY NOT NULL,
                     QUANTITY INT, WHOLESALE_COST REAL, 
                     SALE_PRICE REAL, SUPPLIER_ID CHAR(8) )"""
             dataBase.execute(query)
@@ -31,7 +32,7 @@ class CRUD_operations(Operations):
             
         else:
             # Drop query
-            query = ('INSERT INTO ENTRY(PRODUCT_ID, QUANTITY, WHOLESALE_COST, SALE_PRICE, SUPPLIER_ID' 
+            query = ('INSERT INTO INVENTORY(PRODUCT_ID, QUANTITY, WHOLESALE_COST, SALE_PRICE, SUPPLIER_ID' 
                     'VALUES (:PRODUCT_ID, :QUANTITY, :WHOLESALE_COST, :SALE_PRICE, :SUPPLIER_ID);')
             
             # Will need to connect this to GUI to take in new entry
@@ -45,12 +46,40 @@ class CRUD_operations(Operations):
     def read():
     # This functions calls functions from the operations 
     # class to perform the desired read function
+        cur = dataBase.execute("SELECT * from INVENTORY")
+        
+        # Temporarily will print inventory to terminal
+        # **will need to change to interact with GUI**
+        print(cur.fetchall())
+
+        # Will need to add read selected entries
+
+        dataBase.close()
 
 
     def update():
     # This function calls functions from the operations
     # class to perform the desired update function
+    # This will involve (1) reaching the entry and (2) the changing it
+
+        dataBase.exectue("UPDATE INVNETORY set ROLL = 005 where ID = 1")
+        dataBase.commit()
+
+        cur = dataBase.execute("SELECT * from INVENTORY")
+        
+        # Print to ensure change
+        print(cur.fetchall())
+
+        dataBase.close()
 
     def delete():
     # This function calls functions from teh operations
     # class to perform the desired delete function
+
+        dataBase.execute("DELETE from INVENTORY where ID = 2;")
+        dataBase.commit()
+
+        cur = dataBase.execute("SELECET * from INVENTORY")
+        print(cur.fetchall())
+
+        dataBase.close()
