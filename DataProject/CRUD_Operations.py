@@ -2,6 +2,8 @@
 # in the gaps elsewhere in the project where these operations are necessary.
 from dataclasses import dataclass
 import sqlite3
+import pandas as pd
+import Operations
 from sqlite3 import Error
 
 class CRUD_operations(Operations):
@@ -46,6 +48,7 @@ class CRUD_operations(Operations):
     def read():
     # This functions calls functions from the operations 
     # class to perform the desired read function
+<<<<<<< HEAD
         cur = dataBase.execute("SELECT * from INVENTORY")
         
         # Temporarily will print inventory to terminal
@@ -56,10 +59,14 @@ class CRUD_operations(Operations):
 
         dataBase.close()
 
+=======
+        pass
+>>>>>>> master
 
     def update():
     # This function calls functions from the operations
     # class to perform the desired update function
+<<<<<<< HEAD
     # This will involve (1) reaching the entry and (2) the changing it
 
         dataBase.exectue("UPDATE INVNETORY set ROLL = 005 where ID = 1")
@@ -71,10 +78,14 @@ class CRUD_operations(Operations):
         print(cur.fetchall())
 
         dataBase.close()
+=======
+        pass
+>>>>>>> master
 
     def delete():
     # This function calls functions from teh operations
     # class to perform the desired delete function
+<<<<<<< HEAD
 
         dataBase.execute("DELETE from INVENTORY where ID = 2;")
         dataBase.commit()
@@ -83,3 +94,6 @@ class CRUD_operations(Operations):
         print(cur.fetchall())
 
         dataBase.close()
+=======
+        pass
+>>>>>>> master
