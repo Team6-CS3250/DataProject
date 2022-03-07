@@ -3,15 +3,17 @@ and be able to run for debugging or just running
 the Program. """
 import Operations 
 import unittest
+import DatabaseWarehouse as house
 
 
 
 db = Operations.Ops('inventory.db')
-db.formatTable()
+#db.formatTable()
+
 db.find('cust_email', 'spib@aol.com')
 db.saveChanges()
-db.exit()
 
-#app = db.databaseWarehouse()
-#app.run()
+app = house.databaseWarehouse(db.viewTable())
+app.run()
+db.exit()
 
