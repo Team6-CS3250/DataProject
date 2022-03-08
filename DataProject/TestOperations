@@ -1,0 +1,30 @@
+import unittest
+import Ops
+
+class TestOperations(unittest.TestCase):
+
+    def test_init(self):
+        
+        """
+        *README*
+        Testing should be done in seperate classes, this is just a start to get the ducks in a row
+        """
+
+        """
+        Asserts planned to use for testing
+        -assertRaises and assertEquals could be good too for DatabaseWarehouse _init_
+        -assertEquals for DatabaseWarehouse item_selected (testing line that it moves to)
+        -assertIsInstance for DatabaseWarehouse run
+        -assertIsInstance for Operations _init_
+        -assertIsInstance for Operations viewTable maybe assertTrue
+        -assertIsInstance for Operations saveChanges maybe assertTrue
+        -assertIsInstance for Operations view maybe assertTrue
+        -assertEquals for Operations find (believe this should find the line that the info is on and should equal line)
+        -assertTrue for Operations add, edit, delete, & exit
+        -assertRaises? for CRUD_Operations create (Maybe IsInstance, need more info)
+        -assertTrue for CRUD_Operations read
+        -assertTrue for CRUD_Operations update
+        -assertTrue for CURD_Operations delete
+        """
+        
+        
