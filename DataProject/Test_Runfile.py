@@ -7,7 +7,7 @@ import unittest
 
 
 db = Operations.Ops('inventory.db')
-db.formatTable()
+# db.formatTable()
 db.find('cust_email', 'spib@aol.com')
 db.saveChanges()
 db.exit()
