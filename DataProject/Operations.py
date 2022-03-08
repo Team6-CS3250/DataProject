@@ -14,6 +14,9 @@ class Ops():
     def __init__(self, db_file):
         """ On call from GUI, this initaits by connecting to the DB. """
 
+        #  In addition to accessing the customer_orders.db, is it not important to 
+        # also include the inventory.db in all these operations
+        
         db_file = db_file
         con = None
         try: #Trying to connect to the given DB file path.
@@ -32,7 +35,10 @@ class Ops():
 
     def formatTable(self):
         """Fixer method that is to format the table, use only if the table is not in the DB. """
-        data = pd.read_csv('customer_orders_team6.csv')
+        
+        csv_file_name = 'customer_orders_team6.csv'
+        #  I'm getting an FileNotFoundError on the line below.  Any suggestions as to how to fix this?
+        data = pd.read_csv(csv_file_name)
         df = pd.DataFrame(data)
         cur = self.database.cursor()
         cur.execute("CREATE TABLE IF NOT EXISTS customer_orders(date TEXT, cust_email TEXT, cust_location INTEGER, product_id TEXT, product_quantity INTEGER)")
@@ -55,7 +61,7 @@ class Ops():
 
         self.database.commit()
 
-    def view(self,):
+    def view(self):
         """ This function is used to find an ID from the DB. """
         
         return
@@ -86,18 +92,46 @@ class Ops():
         
     def add(self):
         """ CRUD function, that inserts a series of variables into a new entry in the DB. """
-
-        return
+        
+        cur = self.cur
+        con = self.database
+        
+        query = ('INSERT INTO INVENTORY(PRODUCT_ID, QUANTITY, WHOLESALE_COST, SALE_PRICE, SUPPLIER_ID' 
+                    'VALUES (:PRODUCT_ID, :QUANTITY, :WHOLESALE_COST, :SALE_PRICE, :SUPPLIER_ID);')
+        new_entry = {}
+        
+        con.execute(query, new_entry)
+        con.commit()
+        
+        con.close()
 
     def edit(self):
         """ This function edits the ID that is recived."""
 
-        return
+        cur = self.cur
+        con = self.database
+
+        con.execute('UPDATE INVENTORY set ROLL = 005 where ID = 1')
+        con.commit()
+
+        cur = con.find("SELECT * from INVENTORY")
+        print(cur.fetchall())
+
+        con.close()
 
     def delete(self):
         """ This function deletes the ID currently being recived. """
-    
-        return
+
+        cur = self.cur
+        con =self.database
+
+        con.execute("DELETE from INVENTORY where ID = 1;")
+        con.commit()
+
+        cur = con.execute("SELECR * from INVENTORY")
+        print(cur.fetchall)
+
+        con.close()
 
     def exit(self):
         """ This function will close out of the DB. """
