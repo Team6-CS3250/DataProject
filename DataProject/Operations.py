@@ -37,6 +37,7 @@ class Ops():
         """Fixer method that is to format the table, use only if the table is not in the DB. """
         
         csv_file_name = 'inventory_team6.csv'
+        #  I'm getting an FileNotFoundError on the line below.  Any suggestions as to how to fix this?
         data = pd.read_csv(csv_file_name)
         df = pd.DataFrame(data)
         cur = self.database.cursor()
