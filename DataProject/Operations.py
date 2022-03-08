@@ -14,7 +14,7 @@ class Ops():
     def __init__(self, db_file):
         """ On call from GUI, this initaits by connecting to the DB. """
 
-        #  In addition to accessing the customer_orders.db, is it not important to 
+        #  In addition to accessing the inventory_team6.db, is it not important to 
         # also include the inventory.db in all these operations
         
         db_file = db_file
@@ -36,13 +36,12 @@ class Ops():
     def formatTable(self):
         """Fixer method that is to format the table, use only if the table is not in the DB. """
         
-        csv_file_name = 'customer_orders_team6.csv'
-        #  I'm getting an FileNotFoundError on the line below.  Any suggestions as to how to fix this?
+        csv_file_name = 'inventory_team6.csv'
         data = pd.read_csv(csv_file_name)
         df = pd.DataFrame(data)
         cur = self.database.cursor()
-        cur.execute("CREATE TABLE IF NOT EXISTS customer_orders(date TEXT, cust_email TEXT, cust_location INTEGER, product_id TEXT, product_quantity INTEGER)")
-        data.to_sql('customer_orders', self.database, if_exists='replace', index=False)
+        cur.execute("CREATE TABLE IF NOT EXISTS inventory_team6(date TEXT, cust_email TEXT, cust_location INTEGER, product_id TEXT, product_quantity INTEGER)")
+        data.to_sql('inventory_team6', self.database, if_exists='replace', index=False)
         self.database.commit()
 
 
@@ -52,8 +51,8 @@ class Ops():
 
         cur = self.database.cursor()
         con = self.database        
-        cur.execute("SELECT * FROM customer_orders")
-        df = pd.read_sql_query("SELECT * from customer_orders", con)
+        cur.execute("SELECT * FROM inventory_team6")
+        df = pd.read_sql_query("SELECT * from inventory_team6", con)
         return(df)
 
     def saveChanges(self):
@@ -74,15 +73,15 @@ class Ops():
         cur = self.cur
         con = self.database
         if key == "date":
-            query = cur.execute("SELECT date, cust_email, cust_location, product_id, product_quantity FROM customer_orders WHERE date=?", [entry])
+            query = cur.execute("SELECT date, cust_email, cust_location, product_id, product_quantity FROM inventory_team6 WHERE date=?", [entry])
         elif key == "cust_email":
-            query = cur.execute("SELECT date, cust_email, cust_location, product_id, product_quantity FROM customer_orders WHERE cust_email=?", [entry])
+            query = cur.execute("SELECT date, cust_email, cust_location, product_id, product_quantity FROM inventory_team6 WHERE cust_email=?", [entry])
         elif key == "cust_location":
-            query = cur.execute("SELECT date, cust_email, cust_location, product_id, product_quantity FROM customer_orders WHERE cust_location=?", [entry])
+            query = cur.execute("SELECT date, cust_email, cust_location, product_id, product_quantity FROM inventory_team6 WHERE cust_location=?", [entry])
         elif key == "product_id":
-            query = cur.execute("SELECT date, cust_email, cust_location, product_id, product_quantity FROM customer_orders WHERE product_id=?", [entry])
+            query = cur.execute("SELECT date, cust_email, cust_location, product_id, product_quantity FROM inventory_team6 WHERE product_id=?", [entry])
         elif key == "product_quantity":
-            query = cur.execute("SELECT date, cust_email, cust_location, product_id, product_quantity FROM customer_orders WHERE product_quantity=?", [entry])
+            query = cur.execute("SELECT date, cust_email, cust_location, product_id, product_quantity FROM inventory_team6 WHERE product_quantity=?", [entry])
         else:
             print("Error: Key is out out of bounds.")
             pass
