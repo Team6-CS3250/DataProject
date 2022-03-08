@@ -21,6 +21,7 @@ class CRUD_operations(Operations):
         
         # !! Is it necessary to wrap this all in an if else?
         # Determine if database is empty or not and proceed thusly
+        # we still have to get his figured out
         if database == None:
             # create query
             query = """CREATE TABLE INVENTORY(PRODUCT_ID CHAR(12) PRIMARY KEY NOT NULL,
