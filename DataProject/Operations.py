@@ -35,7 +35,10 @@ class Ops():
 
     def formatTable(self):
         """Fixer method that is to format the table, use only if the table is not in the DB. """
-        data = pd.read_csv('customer_orders_team6.csv')
+        
+        csv_file_name = 'customer_orders_team6.csv'
+        #  I'm getting an FileNotFoundError on the line below.  Any suggestions as to how to fix this?
+        data = pd.read_csv(csv_file_name)
         df = pd.DataFrame(data)
         cur = self.database.cursor()
         cur.execute("CREATE TABLE IF NOT EXISTS customer_orders(date TEXT, cust_email TEXT, cust_location INTEGER, product_id TEXT, product_quantity INTEGER)")
