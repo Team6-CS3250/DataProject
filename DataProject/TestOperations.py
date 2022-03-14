@@ -1,21 +1,14 @@
 import unittest
-import Ops
+from DataProject.Operations import Ops
+import Operations
 
-class TestOperations(unittest.TestCase):
-
-    def test_init(self):
-        
+class TestOperations(unittest.TestCase):        
         """
         *README*
         Testing should be done in seperate classes, this is just a start to get the ducks in a row
-        """
-
-        """
+   
         Asserts planned to use for testing
-        -assertRaises and assertEquals could be good too for DatabaseWarehouse _init_
-        -assertEquals for DatabaseWarehouse item_selected (testing line that it moves to)
-        -assertIsInstance for DatabaseWarehouse run
-        -assertIsInstance for Operations _init_
+       
         -assertIsInstance for Operations viewTable maybe assertTrue
         -assertIsInstance for Operations saveChanges maybe assertTrue
         -assertIsInstance for Operations view maybe assertTrue
@@ -25,6 +18,18 @@ class TestOperations(unittest.TestCase):
         -assertTrue for CRUD_Operations read
         -assertTrue for CRUD_Operations update
         -assertTrue for CURD_Operations delete
-        """
-        
-        
+        """"
+      def test_init(self):
+        self.assertIsInstance(Ops.__init__)"""Not done here still figuring out the testing fields"""
+
+      def test_formatTable(self):
+         self.assertRaises(Ops.formatTable())
+         """Working on fields again"""
+      
+      def test_viewTable(self):
+         self.assertTrue(Ops.viewTable())
+         """Working on fields"""
+      
+      def test_saveChanges(self):
+         self.assertTrue(Ops.saveChanges())
+      
