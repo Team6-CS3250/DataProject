@@ -25,7 +25,7 @@ import unittest
    # def test_init(self):
         
 #class test_format_table(unittest.TestCase):
-#class test_view_table(unittest.TestCase):
+#class test_view_table(unittest.TestCase): 
 #class test_save_changes(unittest.TestCase):
 #class test_view(unittest.TestCase):
 #class test_find(unittest.TestCase):
@@ -59,6 +59,6 @@ class test_delete(unittest.TestCase):
     def setUp(self):
         self.Ops.formatTable()
     
-    def test_add(self):
+    def test_delete(self):
         result = self.Ops.delete()
         self.assertTrue(result.ok)
