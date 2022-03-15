@@ -16,7 +16,7 @@ class frontend_GUI():
     def __init__(self, main):
         """ Main sign in page """
         # Inserting background image
-        welcomeimage = Image.open("/Users/brendadenise/Documents/Spring 2022/welcomepage.png")
+        welcomeimage = Image.open("welcomepage.png")
         test = ImageTk.PhotoImage(welcomeimage)
         welabel = Label(main, image = test)
         welabel.image = test
@@ -42,7 +42,7 @@ class frontend_GUI():
         login.geometry('610x310')
         login.title("Employee Sign In")
         # Inserts background image
-        signinimage = Image.open("/Users/brendadenise/Documents/Spring 2022/spage.png")
+        signinimage = Image.open("spage.png")
         test = ImageTk.PhotoImage(signinimage)
         signlabel = Label(login, image = test)
         signlabel.image = test
