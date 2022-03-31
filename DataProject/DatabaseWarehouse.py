@@ -1,3 +1,5 @@
+from tkinter.messagebox import showinfo
+from tkinter.tix import Tree
 import Operations
 import sys
 import tkinter as tk
@@ -68,8 +70,8 @@ class databaseWarehouse():
         #ttk.Button(self.base, text="Select", command=self.base.destroy).grid(column=1, row=0)
         #ttk.Button(self.base, text="Quit", command=self.base.destroy).grid(column=2, row=0)
     def item_selected(event):
-        for selected_item in tree.selection():
-            item = tree.item(selected_item)
+        for selected_item in Tree.selection():
+            item = ttk.Treeview.item(selected_item)
             record = item['values']
             # show a message
             showinfo(title='Information', message=','.join(record))
