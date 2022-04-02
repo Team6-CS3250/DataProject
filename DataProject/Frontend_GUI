@@ -74,14 +74,5 @@ class frontend_GUI():
         self.nameEntry.delete(0, END)
         self.passwordEntry.delete(0,END)
 
-     #  Need this to begin integrating operations into GUI
-    def input_filename():
-        #  Asks user to input the name of the .csv file they want to 
-        # load into the db and saves the name in the filename object 
-        # to be called in the operations class
-        Tk().withdraw() # Prevents full GUI from openning (root window)
-        filename = filedialog.askopenfilename() 
-        print(filename) # for testig purposes to confirm object initialization
-        
 gui = frontend_GUI(tkwindow)
 tkwindow.mainloop()
