@@ -99,6 +99,7 @@ class Ops():
         repo = pd.DataFrame(cur.fetchall(), columns=['date', 'cust_email', 'cust_location', 'product_id', 'product_quantity'])
         print(repo)
         
+        
     def add(self, entry):
         """ CRUD function, that inserts a series of variables into a new entry in the DB. """
         
