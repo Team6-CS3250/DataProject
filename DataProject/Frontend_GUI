@@ -1,10 +1,11 @@
 import tkinter as tk
 from tkinter import *
-from PIL import ImageTk,Image
+import tkinter.ttk
 
 tkwindow = Tk()
 tkwindow.geometry('610x310')
 tkwindow.title('Team 6 Database Login')
+tkwindow['background']='#a9c476'
 
 class frontend_GUI():
     """
@@ -15,13 +16,6 @@ class frontend_GUI():
     """
     def __init__(self, main):
         """ Main sign in page """
-        # Inserting background image
-        welcomeimage = Image.open("welcomepage.png")
-        test = ImageTk.PhotoImage(welcomeimage)
-        welabel = Label(main, image = test)
-        welabel.image = test
-        # Position image
-        welabel.place(x=0, y=0)
         # Welcome label
         self.welcomeLabel = Label(main, text = "WELCOME!",font =("Helvetica",30))
         self.welcomeLabel.grid(row=0, column=3, padx=20, pady=20)
@@ -41,31 +35,34 @@ class frontend_GUI():
         login = Toplevel()
         login.geometry('610x310')
         login.title("Employee Sign In")
-        # Inserts background image
-        signinimage = Image.open("spage.png")
-        test = ImageTk.PhotoImage(signinimage)
-        signlabel = Label(login, image = test)
-        signlabel.image = test
-        # Position image
-        signlabel.place(x=0, y=0)
+        login['background']='#a9c476'
         # Sign in label
         self.signinLabel = Label(login, text = "Sign In", font =("Helvetica",30))
-        self.signinLabel.grid(row=1, column=4, pady=20)
+        self.signinLabel.grid(row=0, column=10, pady=15)
+        # Line to separate login form
+        tkinter.ttk.Separator(login, orient=VERTICAL).grid(column=9, row=0, rowspan=12, sticky='ns', padx=20)
+        # Welcome back labels
+        self.welcomeLabel = Label(login, text = "Welcome", font =("Helvetica",30))
+        self.welcomeLabel.grid(row=1, column=4)
+        self.backLabel = Label(login, text = "Back!", font =("Helvetica",30))
+        self.backLabel.grid(row=2, column=4)
+        self.accLabel = Label(login, text = "Sign into your existing account.", font =("Helvetica",12))
+        self.accLabel.grid(row=4, column=4, padx=60)
         # Text entry labels
         self.usernameLabel = Label(login, text = "Username/Email:")
-        self.usernameLabel.grid(row=2, column=4, pady=10)
+        self.usernameLabel.grid(row=2, column=10, pady=10)
         self.passwordLabel = Label(login, text = "Password:")
-        self.passwordLabel.grid(row=4, column=4, pady=10)
+        self.passwordLabel.grid(row=4, column=10, pady=10)
         # Text entry
         self.nameEntry = Entry(login, width=20)
-        self.nameEntry.grid(row=3, column=4)
+        self.nameEntry.grid(row=3, column=10)
         self.passwordEntry = Entry(login, width=20, show='*')
-        self.passwordEntry.grid(row=5, column=4, padx=20)
+        self.passwordEntry.grid(row=5, column=10, padx=20)
         # Creates button - login & new user
         self.loginButton = Button(login,text = "LOGIN", bg='grey', font=("Helvetica", 15), command=self.submit)
-        self.loginButton.grid(row=6, column=4 ,padx=10, pady=10)
+        self.loginButton.grid(row=6, column=10 ,padx=10, pady=10)
         self.newuserButton = Button(login, text = "New User?", bg='grey', font=("Helvetica", 15))
-        self.newuserButton.grid(row=7, column=6, pady=10)
+        self.newuserButton.grid(row=6, column=4, pady=10)
 
     def submit(self):
         # Used for the login information to delete for now;to leave entries blank
