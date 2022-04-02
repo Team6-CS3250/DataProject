@@ -2,6 +2,7 @@ from sqlite3 import Error
 import sqlite3
 import pandas as pd
 
+#  will need to add imports to call user entry variables
 
 
 class Ops():
@@ -90,48 +91,60 @@ class Ops():
         repo = pd.DataFrame(cur.fetchall(), columns=['date', 'cust_email', 'cust_location', 'product_id', 'product_quantity'])
         print(repo)
         
-    def add(self):
+    def add(self, entry):
         """ CRUD function, that inserts a series of variables into a new entry in the DB. """
         
-        cur = self.cur
-        con = self.database
-        
-        query = ('INSERT INTO INVENTORY(PRODUCT_ID, QUANTITY, WHOLESALE_COST, SALE_PRICE, SUPPLIER_ID' 
-                    'VALUES (:PRODUCT_ID, :QUANTITY, :WHOLESALE_COST, :SALE_PRICE, :SUPPLIER_ID);')
-        new_entry = {}
-        
-        con.execute(query, new_entry)
-        con.commit()
-        
-        con.close()
+        query = ('insert into customer_orders (date, cust_email, cust_location, product_id, product_quantity)' 'VALUES (:date, :cust_email, :cust_location, :product_id, :product_quantity)')
+        new_entry = user_addition
 
-    def edit(self):
+        try: 
+            cur = self.cur
+            con = self.database
+            con.execute(query, new_entry)
+            con.commit()
+        
+        except Error as e:
+            print(e)
+            
+        finally:
+            if con:
+                con.close()
+
+    def edit(self, entry):
         """ This function edits the ID that is recived."""
+        query = 'UPDATE customer_orders set date=?, cust_email=?, cust_location=?, product_id=?, product_quantity=? where date=?, cust_email=?, cust_location=?, product_id=?, product_quantity=?'
+        updated_entry= user_update
+        
+        try:
+            cur = self.cur
+            con = self.database
+            con.execute(query, updated_entry)
+            con.commit()
+        
+        except Error as e:
+            print(e)
 
-        cur = self.cur
-        con = self.database
+        finally:
+            if con:
+                con.close()
 
-        con.execute('UPDATE INVENTORY set ROLL = 005 where ID = 1')
-        con.commit()
+    def delete(self, entry):
+        """ This function deletes the ID currently being recieved. """
+        query = 'DELETE from customer_orders where date=?, cust_email=?, cust_location=?, product_id=?, product_quantity=?'
+        del_selection = user_deletion
 
-        cur = con.find("SELECT * from INVENTORY")
-        print(cur.fetchall())
+        try:
+            cur = self.cur
+            con = self.database
+            con.execute(query, del_selection)
+            con.commit()
 
-        con.close()
-
-    def delete(self):
-        """ This function deletes the ID currently being recived. """
-
-        cur = self.cur
-        con =self.database
-
-        con.execute("DELETE from INVENTORY where ID = 1;")
-        con.commit()
-
-        cur = con.execute("SELECR * from INVENTORY")
-        print(cur.fetchall)
-
-        con.close()
+        except Error as e:
+            print(e)
+        
+        finally:
+            if con:
+                con.close()
 
     def exit(self):
         """ This function will close out of the DB. """
