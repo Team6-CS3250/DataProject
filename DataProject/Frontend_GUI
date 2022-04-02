@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import *
 from PIL import ImageTk,Image
+from tkinter import filedialog
 
 tkwindow = Tk()
 tkwindow.geometry('610x310')
@@ -71,7 +72,15 @@ class frontend_GUI():
         # Used for the login information to delete for now;to leave entries blank
         self.nameEntry.delete(0, END)
         self.passwordEntry.delete(0,END)
-        
+
+    #  Need this to begin integrating operations into GUI
+    def input_filename():
+        #  Asks user to input the name of the .csv file they want to 
+        # load into the db and saves the name in the filename object 
+        # to be called in the operations class
+        Tk().withdraw() # Prevents full GUI from openning (root window)
+        filename = filedialog.askopenfilename() 
+        print(filename) # for testig purposes to confirm object initialization
 
 gui = frontend_GUI(tkwindow)
 tkwindow.mainloop()
