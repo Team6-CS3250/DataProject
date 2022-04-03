@@ -59,16 +59,38 @@ class frontend_GUI():
         self.passwordEntry = Entry(login, width=20, show='*')
         self.passwordEntry.grid(row=5, column=10, padx=20)
         # Creates button - login & new user
-        self.loginButton = Button(login,text = "LOGIN", bg='grey', font=("Helvetica", 15), command=self.submit)
+        self.loginButton = Button(login,text = "LOGIN", bg='grey', font=("Helvetica", 15), command=self.navBar)
         self.loginButton.grid(row=6, column=10 ,padx=10, pady=10)
         self.newuserButton = Button(login, text = "New User?", bg='grey', font=("Helvetica", 15))
         self.newuserButton.grid(row=6, column=4, pady=10)
 
-    def submit(self):
-        # Used for the login information to delete for now;to leave entries blank
-        self.nameEntry.delete(0, END)
-        self.passwordEntry.delete(0,END)
-        
+    def navBar(self):
+        """ Dashboard Window, where employees will be able to check/update/delete orders """
+        employee_db = Toplevel()
+        employee_db.geometry('900x500')
+        employee_db.title("Employee Dashboard")
+        employee_db.resizable(0,0)
+        # Dashboard frame
+        navFrame=Frame(employee_db, width=250, height=500, bg='#a9c476')
+        navFrame.place(x=0, y=0)
+        self.dbLabel = Label(employee_db, text = "Dashboard",font =("Helvetica",30), bg='#a9c476', height=2, padx=20)
+        self.dbLabel.grid(row=0, column=0, pady=10)
+        #Creating buttons for dashboard
+        #Db - product view
+        self.dbButton = Button(employee_db, text="Database", font =("Helvetica", 20), command=None)
+        self.dbButton.grid(row=1, column=0, pady=15, columnspan=5)
+        #New orders
+        self.orderButton = Button(employee_db, text="New Orders", font =("Helvetica", 20), command=None)
+        self.orderButton.grid(row=2, column=0, pady=15, columnspan=5)
+        #Add products
+        self.addButton = Button(employee_db, text="Add", font =("Helvetica", 20), command=None)
+        self.addButton.grid(row=3, column=0, pady=15, columnspan=5)
+        #Update products
+        self.updateButton = Button(employee_db, text="Update", font =("Helvetica", 20), command=None)
+        self.updateButton.grid(row=4, column=0, pady=15, columnspan=5)
+        #Delete Products
+        self.deleteButton = Button(employee_db, text="Delete", font =("Helvetica", 20), command=None)
+        self.deleteButton.grid(row=5, column=0, pady=15, columnspan=5)
 
 gui = frontend_GUI(tkwindow)
 tkwindow.mainloop()
