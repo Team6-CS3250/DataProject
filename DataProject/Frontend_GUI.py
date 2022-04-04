@@ -1,9 +1,10 @@
+import Operations
 import tkinter as tk
 from tkinter import *
 import tkinter.ttk
 
 tkwindow = Tk()
-tkwindow.geometry('610x310')
+tkwindow.geometry('')
 tkwindow.title('Team 6 Database Login')
 tkwindow['background']='#a9c476'
 
@@ -16,6 +17,7 @@ class frontend_GUI():
     """
     def __init__(self, main):
         """ Main sign in page """
+
         # Welcome label
         self.welcomeLabel = Label(main, text = "WELCOME!",font =("Helvetica",30))
         self.welcomeLabel.grid(row=0, column=3, padx=20, pady=20)
@@ -23,6 +25,7 @@ class frontend_GUI():
         self.userLabel.grid(row=1, column=3)
         self.extraLabel = Label(main, text = "On Time, On Spec, On Budget.", font=("Helvetica", 12))
         self.extraLabel.grid(row=7, column=3, pady=35)
+
         # Employee and customer button
         self.employeeButton = Button(main, text = "EMPLOYEE",bg='grey',font=("Helvetica",25), command=self.employeeLogin)
         self.employeeButton.grid(row=4, column=2,padx=10, pady=12, ipadx=15, ipady=15)
@@ -31,16 +34,20 @@ class frontend_GUI():
 
     def employeeLogin(self):
         """ Used for the employee button command, displays eployee login page"""
+
         # Creates second window
         login = Toplevel()
-        login.geometry('610x310')
+        login.geometry('')
         login.title("Employee Sign In")
         login['background']='#a9c476'
+
         # Sign in label
         self.signinLabel = Label(login, text = "Sign In", font =("Helvetica",30))
         self.signinLabel.grid(row=0, column=10, pady=15)
+
         # Line to separate login form
         tkinter.ttk.Separator(login, orient=VERTICAL).grid(column=9, row=0, rowspan=12, sticky='ns', padx=20)
+
         # Welcome back labels
         self.welcomeLabel = Label(login, text = "Welcome", font =("Helvetica",30))
         self.welcomeLabel.grid(row=1, column=4)
@@ -48,16 +55,19 @@ class frontend_GUI():
         self.backLabel.grid(row=2, column=4)
         self.accLabel = Label(login, text = "Sign into your existing account.", font =("Helvetica",12))
         self.accLabel.grid(row=4, column=4, padx=60)
+
         # Text entry labels
         self.usernameLabel = Label(login, text = "Username/Email:")
         self.usernameLabel.grid(row=2, column=10, pady=10)
         self.passwordLabel = Label(login, text = "Password:")
         self.passwordLabel.grid(row=4, column=10, pady=10)
+
         # Text entry
         self.nameEntry = Entry(login, width=20)
         self.nameEntry.grid(row=3, column=10)
         self.passwordEntry = Entry(login, width=20, show='*')
         self.passwordEntry.grid(row=5, column=10, padx=20)
+
         # Creates button - login & new user
         self.loginButton = Button(login,text = "LOGIN", bg='grey', font=("Helvetica", 15), command=self.navBar)
         self.loginButton.grid(row=6, column=10 ,padx=10, pady=10)
@@ -66,31 +76,79 @@ class frontend_GUI():
 
     def navBar(self):
         """ Dashboard Window, where employees will be able to check/update/delete orders """
-        employee_db = Toplevel()
-        employee_db.geometry('900x500')
-        employee_db.title("Employee Dashboard")
-        employee_db.resizable(0,0)
+
+        self.employee_db = Toplevel()
+        self.employee_db.geometry('')
+        self.employee_db.title("Employee Dashboard")
+        self.employee_db.configure(bg='#a9c476')
+
         # Dashboard frame
-        navFrame=Frame(employee_db, width=250, height=500, bg='#a9c476')
+        navFrame=Frame(self.employee_db, width=250, height=550, bg='#a9c476')
         navFrame.place(x=0, y=0)
-        self.dbLabel = Label(employee_db, text = "Dashboard",font =("Helvetica",30), bg='#a9c476', height=2, padx=20)
+        self.dbLabel = Label(self.employee_db, text = "Dashboard",font =("Helvetica",30), bg='#a9c476', height=2, padx=20)
         self.dbLabel.grid(row=0, column=0, pady=10)
-        #Creating buttons for dashboard
+
+        """ Creating buttons for dashboard """
+
         #Db - product view
-        self.dbButton = Button(employee_db, text="Database", font =("Helvetica", 20), command=None)
-        self.dbButton.grid(row=1, column=0, pady=15, columnspan=5)
+        self.dbButton = Button(self.employee_db, text="Database", font =("Helvetica", 20), command=self.navTable)
+        self.dbButton.grid(row=1, column=0, pady=15, columnspan=1)
+        
         #New orders
-        self.orderButton = Button(employee_db, text="New Orders", font =("Helvetica", 20), command=None)
-        self.orderButton.grid(row=2, column=0, pady=15, columnspan=5)
+        self.orderButton = Button(self.employee_db, text="New Orders", font =("Helvetica", 20), command=None)
+        self.orderButton.grid(row=2, column=0, pady=15, columnspan=1)
+        
         #Add products
-        self.addButton = Button(employee_db, text="Add", font =("Helvetica", 20), command=None)
-        self.addButton.grid(row=3, column=0, pady=15, columnspan=5)
+        self.addButton = Button(self.employee_db, text="Add", font =("Helvetica", 20), command=None)
+        self.addButton.grid(row=3, column=0, pady=15, columnspan=1)
+        
         #Update products
-        self.updateButton = Button(employee_db, text="Update", font =("Helvetica", 20), command=None)
-        self.updateButton.grid(row=4, column=0, pady=15, columnspan=5)
+        self.updateButton = Button(self.employee_db, text="Update", font =("Helvetica", 20), command=None)
+        self.updateButton.grid(row=4, column=0, pady=15, columnspan=1)
+        
         #Delete Products
-        self.deleteButton = Button(employee_db, text="Delete", font =("Helvetica", 20), command=None)
-        self.deleteButton.grid(row=5, column=0, pady=15, columnspan=5)
+        self.deleteButton = Button(self.employee_db, text="Delete", font =("Helvetica", 20), command=None)
+        self.deleteButton.grid(row=5, column=0, pady=15, columnspan=1)
+
+    def navTable(self):
+        """ On button push, bring up the db table on the table."""
+
+        #Open Database
+        self.db = Operations.Ops('inventory.db')
+
+        #Make the sperater from table to sidebar
+        tkinter.ttk.Separator(self.employee_db, orient=VERTICAL).grid(column=1, row=0, rowspan=6, sticky='ns', padx=20)
+
+        #Making the frame for the DB table to sit in
+        navTableFrame = Frame(self.employee_db, width=250, height=550, bg='#a9c476')
+        navTableFrame.grid(row = 0, column = 2, rowspan = 2, columnspan = 3, pady = 10)
+
+        #Creating the format of the table
+        cols = list(selfdb.viewTable().columns)
+        tree = tkinter.ttk.Treeview(navTableFrame, columns=cols, show='headings')
+        tree.heading('date', text='Date')
+        tree.heading('cust_email', text='Customer Email')
+        tree.heading('cust_location', text='Customer Location')
+        tree.heading('product_id', text='Product ID')
+        tree.heading('product_quantity', text='Units Sold')
+        tree["columns"] = cols
+
+        #filling the table based on DB
+        for i in cols:
+            tree.column(i, anchor="w")
+            tree.heading(i, text=i, anchor='w')
+
+        for index, row in db.viewTable().iterrows():
+            tree.insert("",0,text=index,values=list(row))
+        
+        #Inserts tree into its own Grid
+        tree.grid(row=0, column=0, sticky='nsew')
+
+        #Attaches Scrollbar for DB
+        scrollbar = tkinter.ttk.Scrollbar(self.employee_db, orient=tk.VERTICAL, command=tree.yview)
+        tree.configure(yscroll=scrollbar.set)
+        scrollbar.grid(row = 0, column = 5, rowspan = 2, sticky='ns', pady = 10)
+
 
 gui = frontend_GUI(tkwindow)
 tkwindow.mainloop()
