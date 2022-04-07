@@ -124,7 +124,7 @@ class frontend_GUI():
         navTableFrame.grid(row = 0, column = 2, rowspan = 2, columnspan = 3, pady = 10)
 
         #Creating the format of the table
-        cols = list(selfdb.viewTable().columns)
+        cols = list(self.db.viewTable().columns)
         tree = tkinter.ttk.Treeview(navTableFrame, columns=cols, show='headings')
         tree.heading('date', text='Date')
         tree.heading('cust_email', text='Customer Email')
@@ -138,7 +138,7 @@ class frontend_GUI():
             tree.column(i, anchor="w")
             tree.heading(i, text=i, anchor='w')
 
-        for index, row in db.viewTable().iterrows():
+        for index, row in self.db.viewTable().iterrows():
             tree.insert("",0,text=index,values=list(row))
         
         #Inserts tree into its own Grid
