@@ -1,4 +1,5 @@
 import nltk
+#nltk.download() #Empty field to download "wordnet" from ntlk library window, under the second tab corpora
 import re
 from nltk.corpus import wordnet
 #Chatbot scaffolding and psuedocode
