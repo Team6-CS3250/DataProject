@@ -1,6 +1,4 @@
 
-
-
 class UserInterface():
     """ The user intercace class will store the objects input by the user
         to be used in the operations class."""
@@ -22,3 +20,4 @@ class UserInterface():
     # Entry chosen by user to be deleted from database 
     # (will input be a click or a string entry?)
     user_deletion = None
+
