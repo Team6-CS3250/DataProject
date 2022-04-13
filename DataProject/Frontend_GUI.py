@@ -99,7 +99,7 @@ class frontend_GUI():
         self.orderButton.grid(row=2, column=0, pady=15, columnspan=1)
         
         #Add products
-        self.addButton = Button(self.employee_db, text="Add", font =("Helvetica", 20), command=None)
+        self.addButton = Button(self.employee_db, text="Add", font =("Helvetica", 20), command=self.navAdd)
         self.addButton.grid(row=3, column=0, pady=15, columnspan=1)
         
         #Update products
@@ -107,7 +107,7 @@ class frontend_GUI():
         self.updateButton.grid(row=4, column=0, pady=15, columnspan=1)
         
         #Delete Products
-        self.deleteButton = Button(self.employee_db, text="Delete", font =("Helvetica", 20), command=None)
+        self.deleteButton = Button(self.employee_db, text="Delete", font =("Helvetica", 20), command=self.navDelete)
         self.deleteButton.grid(row=5, column=0, pady=15, columnspan=1)
 
     def navTable(self):
@@ -148,6 +148,98 @@ class frontend_GUI():
         scrollbar = tkinter.ttk.Scrollbar(self.employee_db, orient=tk.VERTICAL, command=tree.yview)
         tree.configure(yscroll=scrollbar.set)
         scrollbar.grid(row = 0, column = 5, rowspan = 2, sticky='ns', pady = 10)
+    
+    def navAdd(self):
+        """ On button push, props up new screen to add products """
+
+        #Creating new window
+        self.addWin = Toplevel()
+        self.addWin.geometry('')
+        self.addWin.title("Add Products")
+        self.addWin.configure(bg='white')
+
+        self.addLabel = Label(self.addWin, text = "Add Product:", font =("Helvetica", 20))
+        self.addLabel.grid(row=0, column=0, pady=10)
+
+        #Product ID label & Entries
+        self.prodLabel = Label(self.addWin, text = "Product ID:")
+        self.prodLabel.grid(row=1, column=0, pady=10)
+        self.prodEntry = Entry(self.addWin, width=20)
+        self.prodEntry.grid(row=1, column=1, padx=20)
+
+        #Qty Label
+        self.qtyLabel = Label(self.addWin, text = "Qty:")
+        self.qtyLabel.grid(row=2, column=0, pady=10)
+        self.qtyEntry = Entry(self.addWin, width=20)
+        self.qtyEntry.grid(row=2, column=1, padx=20)
+
+        #Whole Sale Label
+        self.wsLabel = Label(self.addWin, text = "Whole Sale:")
+        self.wsLabel.grid(row=3, column=0, pady=10)
+        self.wsEntry = Entry(self.addWin, width=20)
+        self.wsEntry.grid(row=3, column=1, padx=20)
+
+        #Sale Price Label
+        self.spLabel = Label(self.addWin, text = "Sale Price:")
+        self.spLabel.grid(row=4, column=0, pady=10)
+        self.spEntry = Entry(self.addWin, width=20)
+        self.spEntry.grid(row=4, column=1, padx=20)
+
+        #Supplier ID Label
+        self.supLabel = Label(self.addWin, text = "Supplier ID:")
+        self.supLabel.grid(row=5, column=0, pady=10)
+        self.supEntry = Entry(self.addWin, width=20)
+        self.supEntry.grid(row=5, column=1, padx=20)
+
+        #Add Button
+        self.addButton = Button(self.addWin, text = "Add Product")
+        self.addButton.grid(row=6, column=1, columnspan=2, command=None) #command will add product to db
+
+    def navDelete(self):
+        """ On button push, props up new screen to delete products """
+
+        #Creating new window
+        self.deleteWin = Toplevel()
+        self.deleteWin.geometry('')
+        self.deleteWin.title("Delete Products")
+        self.deleteWin.configure(bg='white')
+
+        self.deleteLabel = Label(self.deleteWin, text = "Delete Product:", font =("Helvetica", 20))
+        self.deleteLabel.grid(row=0, column=0, pady=10)
+
+        #Product ID label & Entries
+        self.prodLabel = Label(self.deleteWin, text = "Product ID:")
+        self.prodLabel.grid(row=1, column=0, pady=10)
+        self.prodEntry = Entry(self.deleteWin, width=20)
+        self.prodEntry.grid(row=1, column=1, padx=20)
+
+        #Qty Label
+        self.qtyLabel = Label(self.deleteWin, text = "Qty:")
+        self.qtyLabel.grid(row=2, column=0, pady=10)
+        self.qtyEntry = Entry(self.deleteWin, width=20)
+        self.qtyEntry.grid(row=2, column=1, padx=20)
+
+        #Whole Sale Label
+        self.wsLabel = Label(self.deleteWin, text = "Whole Sale:")
+        self.wsLabel.grid(row=3, column=0, pady=10)
+        self.wsEntry = Entry(self.deleteWin, width=20)
+        self.wsEntry.grid(row=3, column=1, padx=20)
+
+        #Sale Price Label
+        self.spLabel = Label(self.deleteWin, text = "Sale Price:")
+        self.spLabel.grid(row=4, column=0, pady=10)
+        self.spEntry = Entry(self.deleteWin, width=20)
+        self.spEntry.grid(row=4, column=1, padx=20)
+
+        #Supplier ID Label
+        self.supLabel = Label(self.deleteWin, text = "Supplier ID:")
+        self.supLabel.grid(row=5, column=0, pady=10)
+        self.supEntry = Entry(self.deleteWin, width=20)
+        self.supEntry.grid(row=5, column=1, padx=20)
+
+        #Add Button
+        self.addButton = Button(self.deleteWin, text = "Delete Product")
+        self.addButton.grid(row=6, column=1, columnspan=2, command=None) #command will delete product from db
 
 
 gui = frontend_GUI(tkwindow)
