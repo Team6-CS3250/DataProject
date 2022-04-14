@@ -193,7 +193,7 @@ class frontend_GUI():
 
         #Add Button
         self.addButton = Button(self.addWin, text = "Add Product")
-        self.addButton.grid(row=6, column=1, columnspan=2, command=None) #command will add product to db
+        self.addButton.grid(row=6, column=1, columnspan=2, command=Operations.add) #command will add product to db
 
     def navDelete(self):
         """ On button push, props up new screen to delete products """
@@ -237,9 +237,9 @@ class frontend_GUI():
         self.supEntry = Entry(self.deleteWin, width=20)
         self.supEntry.grid(row=5, column=1, padx=20)
 
-        #Add Button
+        #Delete Button
         self.addButton = Button(self.deleteWin, text = "Delete Product")
-        self.addButton.grid(row=6, column=1, columnspan=2, command=None) #command will delete product from db
+        self.addButton.grid(row=6, column=1, columnspan=2, command=Operations.delete) #command will delete product from db
 
 
 gui = frontend_GUI(tkwindow)
