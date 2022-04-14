@@ -21,7 +21,7 @@ class Ops():
         #  In addition to accessing the customer_orders.db, is it not important to 
         # also include the inventory.db in all these operations
         
-        db_file = UserInterface.file_name
+        #db_file = UserInterface.file_name
         con = None
         try: #Trying to connect to the given DB file path.
             self.database = connect(db_file)
@@ -94,16 +94,17 @@ class Ops():
         repo = pd.DataFrame(cur.fetchall(), columns=['date', 'cust_email', 'cust_location', 'product_id', 'product_quantity'])
         print(repo)
         
-    def add(self, entry):
+    def add(self, new_entry):
         """ CRUD function, that inserts a series of variables into a new entry in the DB. """
         
-        query = ('insert into customer_orders (date, cust_email, cust_location, product_id, product_quantity)' 'VALUES (:date, :cust_email, :cust_location, :product_id, :product_quantity)')
-        new_entry = UserInterface.user_addition
+        query = 'INSERT INTO customer_orders(date, cust_email, cust_location, product_id, product_quantity) VALUES(?, ?, ?, ?, ?)'
+        #new_entry = UserInterface.user_addition
 
         try: 
             cur = self.cur
             con = self.database
-            cur.execute(query, (new_entry))
+
+            cur.execute(query, new_entry)
             con.commit()
         
         except Error as e:

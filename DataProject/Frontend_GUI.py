@@ -149,6 +149,21 @@ class frontend_GUI():
         tree.configure(yscroll=scrollbar.set)
         scrollbar.grid(row = 0, column = 5, rowspan = 2, sticky='ns', pady = 10)
     
+    def getValues(self):
+        prod = self.prodEntry.get()
+        qty = self.qtyEntry.get()
+        ws = self.wsEntry.get()
+        sp = self.spEntry.get()
+        sup = self.supEntry.get()
+        
+        entry = (prod, qty, ws, sp, sup)
+        print(entry)
+        return entry
+
+
+
+
+
     def navAdd(self):
         """ On button push, props up new screen to add products """
 
@@ -162,38 +177,38 @@ class frontend_GUI():
         self.addLabel.grid(row=0, column=0, pady=10)
 
         #Product ID label & Entries
-        self.prodLabel = Label(self.addWin, text = "Product ID:")
+        self.prodLabel = Label(self.addWin, text = "Date:")
         self.prodLabel.grid(row=1, column=0, pady=10)
         self.prodEntry = Entry(self.addWin, width=20)
         self.prodEntry.grid(row=1, column=1, padx=20)
 
         #Qty Label
-        self.qtyLabel = Label(self.addWin, text = "Qty:")
+        self.qtyLabel = Label(self.addWin, text = "Customer Email:")
         self.qtyLabel.grid(row=2, column=0, pady=10)
         self.qtyEntry = Entry(self.addWin, width=20)
         self.qtyEntry.grid(row=2, column=1, padx=20)
 
         #Whole Sale Label
-        self.wsLabel = Label(self.addWin, text = "Whole Sale:")
+        self.wsLabel = Label(self.addWin, text = "Location:")
         self.wsLabel.grid(row=3, column=0, pady=10)
         self.wsEntry = Entry(self.addWin, width=20)
         self.wsEntry.grid(row=3, column=1, padx=20)
 
         #Sale Price Label
-        self.spLabel = Label(self.addWin, text = "Sale Price:")
+        self.spLabel = Label(self.addWin, text = "Product ID:")
         self.spLabel.grid(row=4, column=0, pady=10)
         self.spEntry = Entry(self.addWin, width=20)
         self.spEntry.grid(row=4, column=1, padx=20)
 
         #Supplier ID Label
-        self.supLabel = Label(self.addWin, text = "Supplier ID:")
+        self.supLabel = Label(self.addWin, text = "Product Quantity:")
         self.supLabel.grid(row=5, column=0, pady=10)
         self.supEntry = Entry(self.addWin, width=20)
         self.supEntry.grid(row=5, column=1, padx=20)
 
         #Add Button
         self.addButton = Button(self.addWin, text = "Add Product")
-        self.addButton.grid(row=6, column=1, columnspan=2, command=Operations.add) #command will add product to db
+        self.addButton.grid(row=6, column=1, columnspan=2, command = self.db.add(self.getValues()) ) #command will add product to db
 
     def navDelete(self):
         """ On button push, props up new screen to delete products """

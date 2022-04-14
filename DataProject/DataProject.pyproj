@@ -25,6 +25,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DatabaseWarehouse.py" />
+    <Compile Include="passwordEntryField.py" />
     <Compile Include="TestDatabaseWarehouse.py" />
     <Compile Include="TestOperations.py" />
     <Compile Include="Test_Runfile.py">
