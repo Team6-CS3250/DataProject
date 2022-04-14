@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>5529818d-c37e-4e55-9c5a-4cc0e1f47f05</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Test_Runfile.py</StartupFile>
+    <StartupFile>Frontend_GUI.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -24,8 +24,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CRUD_Operations.py" />
     <Compile Include="DatabaseWarehouse.py" />
+    <Compile Include="TestDatabaseWarehouse.py" />
+    <Compile Include="TestOperations.py" />
     <Compile Include="Test_Runfile.py">
       <SubType>Code</SubType>
     </Compile>
@@ -46,6 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|PythonCore|3.7" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Frontend_GUI.py">
+      <Publish>True</Publish>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
