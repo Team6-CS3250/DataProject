@@ -1,17 +1,16 @@
 import nltk
-#nltk.download() #Empty field to download "wordnet" from ntlk library window, under the second tab corpora
+#nltk.download() #Empty field to download "wordnet" and "omw-1.4" from ntlk library window, under the second tab corpora, then can be commented out
 import re
 from nltk.corpus import wordnet
-#Chatbot scaffolding and psuedocode
+#Chatbot program shows synonyms for selected words thus far
 #re is a package for regular expressions
 #Helps with a dictionary of synonyms for keywords
 
-#Dependencies that need to be imported
 
 class Chatbot():
     #List of keywords to respond to
     #Hello, order, stock, shipping
-    list_words = ['Hello', 'Order', 'Stock', 'Shipping']
+    list_words = ['Hello', 'Order', 'Inventory', 'Shipping']
 
     list_syn = {}
 
