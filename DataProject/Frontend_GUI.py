@@ -71,8 +71,43 @@ class frontend_GUI():
         # Creates button - login & new user
         self.loginButton = Button(login,text = "LOGIN", bg='grey', font=("Helvetica", 15), command=self.navBar)
         self.loginButton.grid(row=6, column=10 ,padx=10, pady=10)
-        self.newuserButton = Button(login, text = "New User?", bg='grey', font=("Helvetica", 15))
+        self.newuserButton = Button(login, text = "New User?", bg='grey', font=("Helvetica", 15),command=self.newUser)
         self.newuserButton.grid(row=6, column=4, pady=10)
+    
+    def newUser(self):
+        """ Creates a new window for new users to create a new account """
+
+        # Creating new window
+        self.newWin = Toplevel()
+        self.newWin.geometry('250x400')
+        self.newWin.title("New User")
+        self.newWin.configure(bg='#a9c476')
+
+        # Creating labels
+        self.welLabel = Label(self.newWin, text ="Welcome new user!", font =("Helvetica", 20))
+        self.welLabel.grid(row=0, column =1, pady=20)
+        self.accLabel = Label(self.newWin, text = "New Account", font =("Helvetica", 20))
+        self.accLabel.grid(row=1, column =1, pady=20)
+
+        # Creating labels and entries for new account
+        self.emailLabel = Label(self.newWin, text="Email:", font =("Helvetica", 15), bg='#a9c476')
+        self.emailLabel.grid(row=2, column =1)
+        self.emailEntry = Entry(self.newWin, width=20)
+        self.emailEntry.grid(row=3, column =0, columnspan=2,padx=20,)
+
+        self.userLabel = Label(self.newWin, text="Username:", font =("Helvetica", 15), bg='#a9c476')
+        self.userLabel.grid(row=4, column =1)
+        self.userEntry = Entry(self.newWin, width=20)
+        self.userEntry.grid(row=5, column =0, columnspan=2,padx=20,)
+
+        self.passLabel = Label(self.newWin, text="Password:", font =("Helvetica", 15), bg='#a9c476')
+        self.passLabel.grid(row=6, column =1)
+        self.passEntry = Entry(self.newWin, width=20)
+        self.passEntry.grid(row=7, column =0, columnspan=2, padx=20)
+
+        # Creating button
+        self.createButton = Button(self.newWin, text="Create Account", font=("Helvetica", 15), command=None) #command will store user information
+        self.createButton.grid(row=8, column=1, pady=15)
 
     def navBar(self):
         """ Dashboard Window, where employees will be able to check/update/delete orders """
