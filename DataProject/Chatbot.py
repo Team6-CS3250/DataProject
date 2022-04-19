@@ -1,4 +1,5 @@
 import nltk
+nltk.download()
 import re
 from nltk.corpus import wordnet
 #Chatbot scaffolding and psuedocode
