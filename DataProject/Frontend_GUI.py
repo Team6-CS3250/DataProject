@@ -4,9 +4,6 @@ import tkinter as tk
 from tkinter import *
 import tkinter.ttk
 
-db = Operations.Ops('inventory.db')
-db.formatTable()
-
 tkwindow = Tk()
 tkwindow.geometry('')
 tkwindow.title('Team 6 Database Login')
