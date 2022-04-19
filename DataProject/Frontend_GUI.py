@@ -1,7 +1,11 @@
+from typing import ValuesView
 import Operations
 import tkinter as tk
 from tkinter import *
 import tkinter.ttk
+
+db = Operations.Ops('inventory.db')
+db.formatTable()
 
 tkwindow = Tk()
 tkwindow.geometry('')
@@ -120,162 +124,184 @@ class frontend_GUI():
         # Dashboard frame
         navFrame=Frame(self.employee_db, width=250, height=550, bg='#a9c476')
         navFrame.place(x=0, y=0)
-        self.dbLabel = Label(self.employee_db, text = "Dashboard",font =("Helvetica",30), bg='#a9c476', height=2, padx=20)
-        self.dbLabel.grid(row=0, column=0, pady=10)
+        #self.dbLabel = Label(self.employee_db, text = "Dashboard",font =("Helvetica",30), bg='#a9c476', height=2, padx=20)
+        #self.dbLabel.grid(row=0, column=0, pady=10)
 
-        """ Creating buttons for dashboard """
 
-        #Db - product view
-        self.dbButton = Button(self.employee_db, text="Database", font =("Helvetica", 20), command=self.navTable)
-        self.dbButton.grid(row=1, column=0, pady=15, columnspan=1)
-        
-        #New orders
-        self.orderButton = Button(self.employee_db, text="New Orders", font =("Helvetica", 20), command=None)
-        self.orderButton.grid(row=2, column=0, pady=15, columnspan=1)
-        
-        #Add products
-        self.addButton = Button(self.employee_db, text="Add", font =("Helvetica", 20), command=self.navAdd)
-        self.addButton.grid(row=3, column=0, pady=15, columnspan=1)
-        
-        #Update products
-        self.updateButton = Button(self.employee_db, text="Update", font =("Helvetica", 20), command=None)
-        self.updateButton.grid(row=4, column=0, pady=15, columnspan=1)
-        
-        #Delete Products
-        self.deleteButton = Button(self.employee_db, text="Delete", font =("Helvetica", 20), command=self.navDelete)
-        self.deleteButton.grid(row=5, column=0, pady=15, columnspan=1)
-
-    def navTable(self):
-        """ On button push, bring up the db table on the table."""
+        ''' Creating and Connecting the DB '''
 
         #Open Database
         self.db = Operations.Ops('inventory.db')
 
-        #Make the sperater from table to sidebar
-        tkinter.ttk.Separator(self.employee_db, orient=VERTICAL).grid(column=1, row=0, rowspan=6, sticky='ns', padx=20)
-
         #Making the frame for the DB table to sit in
         navTableFrame = Frame(self.employee_db, width=250, height=550, bg='#a9c476')
-        navTableFrame.grid(row = 0, column = 2, rowspan = 2, columnspan = 3, pady = 10)
+        navTableFrame.grid(row = 0, column = 0, rowspan = 2, columnspan = 5, pady = 10)
 
         #Creating the format of the table
         cols = list(self.db.viewTable().columns)
-        tree = tkinter.ttk.Treeview(navTableFrame, columns=cols, show='headings')
-        tree.heading('date', text='Date')
-        tree.heading('cust_email', text='Customer Email')
-        tree.heading('cust_location', text='Customer Location')
-        tree.heading('product_id', text='Product ID')
-        tree.heading('product_quantity', text='Units Sold')
-        tree["columns"] = cols
+        self.tree = tkinter.ttk.Treeview(navTableFrame, columns=cols, show='headings')
+        self.tree.heading('date', text='Date')
+        self.tree.heading('cust_email', text='Customer Email')
+        self.tree.heading('cust_location', text='Customer Location')
+        self.tree.heading('product_id', text='Product ID')
+        self.tree.heading('product_quantity', text='Units Sold')
+        self.tree.heading('trade_number', text='Sale Number')
+        self.tree.bind('<Double-1>', self.OnDoubleClick)
+        self.tree["columns"] = cols
 
         #filling the table based on DB
         for i in cols:
-            tree.column(i, anchor="w")
-            tree.heading(i, text=i, anchor='w')
+            self.tree.column(i, anchor="w")
+            self.tree.heading(i, text=i, anchor='w')
 
         for index, row in self.db.viewTable().iterrows():
-            tree.insert("",0,text=index,values=list(row))
+            self.tree.insert("",0,text=index,values=list(row))
         
         #Inserts tree into its own Grid
-        tree.grid(row=0, column=0, sticky='nsew')
+        self.tree.grid(row=0, column=0, sticky='nsew')
 
         #Attaches Scrollbar for DB
-        scrollbar = tkinter.ttk.Scrollbar(self.employee_db, orient=tk.VERTICAL, command=tree.yview)
-        tree.configure(yscroll=scrollbar.set)
+        scrollbar = tkinter.ttk.Scrollbar(self.employee_db, orient=tk.VERTICAL, command=self.tree.yview)
+        self.tree.configure(yscroll=scrollbar.set)
         scrollbar.grid(row = 0, column = 5, rowspan = 2, sticky='ns', pady = 10)
-    
-    def navAdd(self):
-        """ On button push, props up new screen to add products """
 
-        #Creating new window
-        self.addWin = Toplevel()
-        self.addWin.geometry('')
-        self.addWin.title("Add Products")
-        self.addWin.configure(bg='white')
 
-        self.addLabel = Label(self.addWin, text = "Add Product:", font =("Helvetica", 20))
-        self.addLabel.grid(row=0, column=0, pady=10)
+        """ Creating buttons for dashboard """
 
+        #Db - product view
+        self.dbButton = Button(self.employee_db, text="Refresh", font =("Helvetica", 20), command=lambda: self.dbTableRefresh())
+        self.dbButton.grid(row=2, column=0, pady=10, columnspan=1)
+        
+        #Add products
+        self.addButton = Button(self.employee_db, text="Add", font =("Helvetica", 20), command=lambda: [self.db.add(self.addGetValues()), self.dbTableRefresh()])
+        self.addButton.grid(row=2, column=1, pady=10, columnspan=1)
+        
+        #Update products
+        self.updateButton = Button(self.employee_db, text="Update", font =("Helvetica", 20), command=lambda: [self.db.edit(self.updateGetValues()), self.dbTableRefresh()])
+        self.updateButton.grid(row=2, column=2, pady=10, columnspan=1)
+        
+        #Delete Products
+        self.deleteButton = Button(self.employee_db, text="Delete", font =("Helvetica", 20), command=lambda: [self.db.delete(self.getValues()), self.dbTableRefresh()])
+        self.deleteButton.grid(row=2, column=3, pady=10, columnspan=1)
+
+        #Save Products
+        self.deleteButton = Button(self.employee_db, text="Save", font =("Helvetica", 20), command=lambda: self.db.saveChanges())
+        self.deleteButton.grid(row=2, column=4, pady=10, columnspan=1)
+
+        """ Creating entry feilds """ 
+        
         #Product ID label & Entries
-        self.prodLabel = Label(self.addWin, text = "Product ID:")
-        self.prodLabel.grid(row=1, column=0, pady=10)
-        self.prodEntry = Entry(self.addWin, width=20)
-        self.prodEntry.grid(row=1, column=1, padx=20)
+        self.prodLabel = Label(self.employee_db, text = "Date")
+        self.prodLabel.grid(row=3, column=0, pady=10)
+        self.prodEntry = Entry(self.employee_db, width=20)
+        self.prodEntry.grid(row=4, column=0, padx=20)
 
         #Qty Label
-        self.qtyLabel = Label(self.addWin, text = "Qty:")
-        self.qtyLabel.grid(row=2, column=0, pady=10)
-        self.qtyEntry = Entry(self.addWin, width=20)
-        self.qtyEntry.grid(row=2, column=1, padx=20)
+        self.qtyLabel = Label(self.employee_db, text = "Customer Email")
+        self.qtyLabel.grid(row=3, column=1, pady=10)
+        self.qtyEntry = Entry(self.employee_db, width=20)
+        self.qtyEntry.grid(row=4, column=1, padx=20)
 
         #Whole Sale Label
-        self.wsLabel = Label(self.addWin, text = "Whole Sale:")
-        self.wsLabel.grid(row=3, column=0, pady=10)
-        self.wsEntry = Entry(self.addWin, width=20)
-        self.wsEntry.grid(row=3, column=1, padx=20)
+        self.wsLabel = Label(self.employee_db, text = "Location")
+        self.wsLabel.grid(row=3, column=2, pady=10)
+        self.wsEntry = Entry(self.employee_db, width=20)
+        self.wsEntry.grid(row=4, column=2, padx=20)
 
         #Sale Price Label
-        self.spLabel = Label(self.addWin, text = "Sale Price:")
-        self.spLabel.grid(row=4, column=0, pady=10)
-        self.spEntry = Entry(self.addWin, width=20)
-        self.spEntry.grid(row=4, column=1, padx=20)
+        self.spLabel = Label(self.employee_db, text = "Product ID")
+        self.spLabel.grid(row=3, column=3, pady=10)
+        self.spEntry = Entry(self.employee_db, width=20)
+        self.spEntry.grid(row=4, column=3, padx=20)
 
         #Supplier ID Label
-        self.supLabel = Label(self.addWin, text = "Supplier ID:")
-        self.supLabel.grid(row=5, column=0, pady=10)
-        self.supEntry = Entry(self.addWin, width=20)
-        self.supEntry.grid(row=5, column=1, padx=20)
+        self.supLabel = Label(self.employee_db, text = "Product Quantity")
+        self.supLabel.grid(row=3, column=4, pady=10)
+        self.supEntry = Entry(self.employee_db, width=20)
+        self.supEntry.grid(row=4, column=4, padx=20, pady= 10)
 
-        #Add Button
-        self.addButton = Button(self.addWin, text = "Add Product")
-        self.addButton.grid(row=6, column=1, columnspan=2, command=Operations.add) #command will add product to db
+    def OnDoubleClick(self, event):
+        #On double click, fill entryfields with values from selected item
+        item = self.tree.selection()
 
-    def navDelete(self):
-        """ On button push, props up new screen to delete products """
+        for i in item:
+            #Extract values of the selected item
+            prod = str(self.tree.item(i,"values")[0]) 
+            qty = str(self.tree.item(i, "values")[1])
+            ws = str(self.tree.item(i, "values")[2])
+            sp = str(self.tree.item(i, "values")[3])
+            sup = str(self.tree.item(i, "values")[4])
+            num = str(self.tree.item(i, "values")[5])
 
-        #Creating new window
-        self.deleteWin = Toplevel()
-        self.deleteWin.geometry('')
-        self.deleteWin.title("Delete Products")
-        self.deleteWin.configure(bg='white')
+            #Clear entry fields
+            self.prodEntry.delete(0, END)
+            self.qtyEntry.delete(0, END)
+            self.wsEntry.delete(0, END)
+            self.spEntry.delete(0, END)
+            self.supEntry.delete(0, END)
 
-        self.deleteLabel = Label(self.deleteWin, text = "Delete Product:", font =("Helvetica", 20))
-        self.deleteLabel.grid(row=0, column=0, pady=10)
+            #Insert the selected value into the entry fields
+            self.prodEntry.insert(END, prod)
+            self.qtyEntry.insert(END, qty)
+            self.wsEntry.insert(END, ws)
+            self.spEntry.insert(END, sp)
+            self.supEntry.insert(END, sup)
 
-        #Product ID label & Entries
-        self.prodLabel = Label(self.deleteWin, text = "Product ID:")
-        self.prodLabel.grid(row=1, column=0, pady=10)
-        self.prodEntry = Entry(self.deleteWin, width=20)
-        self.prodEntry.grid(row=1, column=1, padx=20)
+    def dbTableRefresh(self):
+        """ Add function to call for changing"""
+        self.db = Operations.Ops('inventory.db')
+        cols = list(self.db.viewTable().columns)
 
-        #Qty Label
-        self.qtyLabel = Label(self.deleteWin, text = "Qty:")
-        self.qtyLabel.grid(row=2, column=0, pady=10)
-        self.qtyEntry = Entry(self.deleteWin, width=20)
-        self.qtyEntry.grid(row=2, column=1, padx=20)
+        #filling the table based on DB
+        for i in cols:
+            self.tree.column(i, anchor="w")
+            self.tree.heading(i, text=i, anchor='w')
 
-        #Whole Sale Label
-        self.wsLabel = Label(self.deleteWin, text = "Whole Sale:")
-        self.wsLabel.grid(row=3, column=0, pady=10)
-        self.wsEntry = Entry(self.deleteWin, width=20)
-        self.wsEntry.grid(row=3, column=1, padx=20)
+        for index, row in self.db.viewTable().iterrows():
+            self.tree.insert("",0,text=index,values=list(row))
 
-        #Sale Price Label
-        self.spLabel = Label(self.deleteWin, text = "Sale Price:")
-        self.spLabel.grid(row=4, column=0, pady=10)
-        self.spEntry = Entry(self.deleteWin, width=20)
-        self.spEntry.grid(row=4, column=1, padx=20)
+    def updateGetValues(self):
+        item = self.tree.selection()
+        for i in item:
+            num = str(self.tree.item(i, "values")[5])
 
-        #Supplier ID Label
-        self.supLabel = Label(self.deleteWin, text = "Supplier ID:")
-        self.supLabel.grid(row=5, column=0, pady=10)
-        self.supEntry = Entry(self.deleteWin, width=20)
-        self.supEntry.grid(row=5, column=1, padx=20)
+        prod = self.prodEntry.get()
+        qty = self.qtyEntry.get()
+        ws = self.wsEntry.get()
+        sp = self.spEntry.get()
+        sup = self.supEntry.get()
 
-        #Delete Button
-        self.addButton = Button(self.deleteWin, text = "Delete Product")
-        self.addButton.grid(row=6, column=1, columnspan=2, command=Operations.delete) #command will delete product from db
+        entry = [prod, qty, ws, sp, sup, num]
+        print(entry)
+        return entry
 
+    def getValues(self):
+        item = self.tree.selection()
+        for i in item:
+            #Extract values of the selected it
+            prod = str(self.tree.item(i,"values")[0]) 
+            qty = str(self.tree.item(i, "values")[1])
+            ws = str(self.tree.item(i, "values")[2])
+            sp = str(self.tree.item(i, "values")[3])
+            sup = str(self.tree.item(i, "values")[4])
+            num = str(self.tree.item(i, "values")[5])
+        
+        
+        entry = [prod, qty, ws, sp, sup, num]
+        print(entry)
+        return entry
+
+    def addGetValues(self):
+        prod = self.prodEntry.get()
+        qty = self.qtyEntry.get()
+        ws = self.wsEntry.get()
+        sp = self.spEntry.get()
+        sup = self.supEntry.get()
+        num = 0
+
+        entry = [prod, qty, ws, sp, sup, num]
+        print(entry)
+        return entry
 
 gui = frontend_GUI(tkwindow)
 tkwindow.mainloop()
