@@ -28,9 +28,6 @@
     <Compile Include="passwordEntryField.py" />
     <Compile Include="TestDatabaseWarehouse.py" />
     <Compile Include="TestOperations.py" />
-    <Compile Include="Test_Runfile.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Operations.py">
       <SubType>Code</SubType>
     </Compile>
