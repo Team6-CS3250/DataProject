@@ -1,12 +1,6 @@
 from sqlite3 import *
 import pandas as pd
 
-from UserInterface import *
-
-
-
-#  will need to add imports to call user entry variables
-
 
 class Ops():
     """ 
@@ -21,7 +15,7 @@ class Ops():
         #  In addition to accessing the customer_orders.db, is it not important to 
         # also include the inventory.db in all these operations
         
-        db_file = UserInterface.file_name
+        #db_file = UserInterface.file_name
         con = None
         try: #Trying to connect to the given DB file path.
             self.database = connect(db_file)
@@ -65,12 +59,7 @@ class Ops():
 
         self.database.commit()
 
-    def view(self):
-        """ This function is used to find an ID from the DB. """
-        
-        return
-
-    def find(self, key, entry):
+    def find(self, date, email, loc, prod, qt):
         """ This function is used to return the ID given to it. find('key','entry')
         Key -> date, cust_email, cust_location, product_id, product_quantity
         Entry -> the value/s that you are looking for.
@@ -91,19 +80,24 @@ class Ops():
             print("Error: Key is out out of bounds.")
             pass
         
-        repo = pd.DataFrame(cur.fetchall(), columns=['date', 'cust_email', 'cust_location', 'product_id', 'product_quantity'])
+        repo = pd.DataFrame(cur.fetchall(), columns=['date', 'cust_email', 'cust_location', 'product_id', 'product_quantity', 'trade_number'])
         print(repo)
         
-    def add(self, entry):
+    def add(self, new_entry):
         """ CRUD function, that inserts a series of variables into a new entry in the DB. """
-        
-        query = ('insert into customer_orders (date, cust_email, cust_location, product_id, product_quantity)' 'VALUES (:date, :cust_email, :cust_location, :product_id, :product_quantity)')
-        new_entry = UserInterface.user_addition
+
+        query = 'INSERT INTO customer_orders(date, cust_email, cust_location, product_id, product_quantity, trade_number) VALUES(?, ?, ?, ?, ?, ? + 1)'
 
         try: 
             cur = self.cur
             con = self.database
-            cur.execute(query, (new_entry))
+            cur.execute('SELECT MAX(trade_number) FROM customer_orders')
+            val = cur.fetchone()
+            list(val)
+            for i in range(len(new_entry)):
+                if new_entry[i] == new_entry[5]:
+                    new_entry[i] = val[0]
+            cur.execute(query, new_entry)
             con.commit()
         
         except Error as e:
@@ -115,13 +109,11 @@ class Ops():
 
     def edit(self, entry):
         """ This function edits the ID that is recived."""
-        query = 'UPDATE customer_orders set date=?, cust_email=?, cust_location=?, product_id=?, product_quantity=? where date=?, cust_email=?, cust_location=?, product_id=?, product_quantity=?'
-        updated_entry = UserInterface.user_update
-        
+        query = "UPDATE customer_orders SET date = ?, cust_email = ?, cust_location = ?, product_id = ?, product_quantity = ? WHERE trade_number = ?"       
         try:
             cur = self.cur
             con = self.database
-            cur.execute(query, (updated_entry))
+            cur.execute(query, entry)
             con.commit()
         
         except Error as e:
@@ -133,13 +125,13 @@ class Ops():
 
     def delete(self, entry):
         """ This function deletes the ID currently being recieved. """
-        query = 'DELETE from customer_orders where date=?, cust_email=?, cust_location=?, product_id=?, product_quantity=?'
-        del_selection = UserInterface.user_deletion
-
+        num = entry[5]
+        query = ('DELETE FROM customer_orders WHERE trade_number = ' + num )
+        print(query)
         try:
             cur = self.cur
             con = self.database
-            cur.execute(query, (del_selection))
+            cur.execute(query)
             con.commit()
 
         except Error as e:
