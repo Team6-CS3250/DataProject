@@ -1,5 +1,5 @@
 #password and username entry field
-#needs to be debugged and tested
+
 
 from cProfile import label
 from tkinter import PhotoImage, Tk
