@@ -1,11 +1,6 @@
 from sqlite3 import *
 import pandas as pd
 
-from UserInterface import *
-
-
-#  will need to add imports to call user entry variables
-
 
 class Ops():
     """ 
