@@ -1,5 +1,6 @@
 from sqlite3 import *
 import pandas as pd
+import os
 
 
 class Ops():
@@ -12,11 +13,12 @@ class Ops():
     def __init__(self, db_file):
         """ On call from GUI, this initaits by connecting to the DB. """
 
-        #  In addition to accessing the customer_orders.db, is it not important to 
+        # In addition to accessing the customer_orders.db, is it not important to 
         # also include the inventory.db in all these operations
         
         #db_file = UserInterface.file_name
         con = None
+        self.table = 'customer_orders'
         try: #Trying to connect to the given DB file path.
             self.database = connect(db_file)
             print(version)
@@ -29,14 +31,26 @@ class Ops():
             if con:
                 con.close()
 
+    def TableSwitch(self):
+        """Switch table to product table instead of orders table."""
 
+        if self.table == 'customer_orders':
+            self.table = 'inventory_items'
+        else:
+            self.table = 'customer_orders'
+
+            
 
     def formatTable(self):
         """Fixer method that is to format the table, use only if the table is not in the DB. """
         
-        csv_file_name = 'customer_orders_team6.csv'
+        csv_file_name_1 = 'customer_orders_team6.csv'
+        target_path_1 = os.path.join(os.path.dirname(__file__), 'customer_orders_team6.csv')
+        print(target_path_1)
+
+
         #  I'm getting an FileNotFoundError on the line below.  Any suggestions as to how to fix this?
-        data = pd.read_csv(csv_file_name)
+        data = pd.read_csv(target_path_1)
         df = pd.DataFrame(data)
         cur = self.database.cursor()
         cur.execute("CREATE TABLE IF NOT EXISTS customer_orders(date TEXT, cust_email TEXT, cust_location INTEGER, product_id TEXT, product_quantity INTEGER)")

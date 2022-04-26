@@ -9,6 +9,10 @@ tkwindow.geometry('')
 tkwindow.title('Team 6 Database Login')
 tkwindow['background']='#a9c476'
 
+db = Operations.Ops('inventory.db')
+db.formatTable()
+
+
 class frontend_GUI():
     """
     This class will be the front-end of the GUI, where users
@@ -182,7 +186,7 @@ class frontend_GUI():
         self.deleteButton.grid(row=2, column=3, pady=10, columnspan=1)
 
         #Save Products
-        self.deleteButton = Button(self.employee_db, text="Save", font =("Helvetica", 20), command=lambda: self.db.saveChanges())
+        self.deleteButton = Button(self.employee_db, text="Table Toggle", font =("Helvetica", 20), command=lambda: self.db.TableSwitch())
         self.deleteButton.grid(row=2, column=4, pady=10, columnspan=1)
 
         """ Creating entry feilds """ 
