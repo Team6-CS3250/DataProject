@@ -1,5 +1,6 @@
 from sqlite3 import *
 import pandas as pd
+import os
 
 
 class Ops():
@@ -12,11 +13,12 @@ class Ops():
     def __init__(self, db_file):
         """ On call from GUI, this initaits by connecting to the DB. """
 
-        #  In addition to accessing the customer_orders.db, is it not important to 
+        # In addition to accessing the customer_orders.db, is it not important to 
         # also include the inventory.db in all these operations
         
         #db_file = UserInterface.file_name
         con = None
+        self.table = 'customer_orders'
         try: #Trying to connect to the given DB file path.
             self.database = connect(db_file)
             print(version)
@@ -30,34 +32,59 @@ class Ops():
                 con.close()
 
 
+    def tableSwitch(self):
+        """Switch table to product table instead of orders table."""
+
+        if self.table == 'customer_orders':
+            self.table = 'inventory_items'
+        else:
+            self.table = 'customer_orders'
+
 
     def formatTable(self):
         """Fixer method that is to format the table, use only if the table is not in the DB. """
         
-        csv_file_name = 'customer_orders_team6.csv'
-        #  I'm getting an FileNotFoundError on the line below.  Any suggestions as to how to fix this?
-        data = pd.read_csv(csv_file_name)
-        df = pd.DataFrame(data)
+        target_path_1 = os.path.join(os.path.dirname(__file__), 'customer_orders_team6.csv')
+        print(target_path_1)
+        target_path_2 = os.path.join(os.path.dirname(__file__), 'inventory_team6.csv')
+        print(target_path_2)
+
+        data = pd.read_csv(target_path_1)
         cur = self.database.cursor()
-        cur.execute("CREATE TABLE IF NOT EXISTS customer_orders(date TEXT, cust_email TEXT, cust_location INTEGER, product_id TEXT, product_quantity INTEGER)")
+        cur.execute("CREATE TABLE IF NOT EXISTS customer_orders(date TEXT, cust_email TEXT, cust_location INTEGER, product_id TEXT, product_quantity INTEGER, trade_number INTEGER)")
         data.to_sql('customer_orders', self.database, if_exists='replace', index=False)
+        self.database.commit()
+
+        data = pd.read_csv(target_path_2)
+        cur = self.database.cursor()
+        cur.execute("CREATE TABLE IF NOT EXISTS inventory(product_id TEXT, quantity INTEGER, wholesale_cost REAL, sale_price REAL, supplier_id TEXT, entry_number INTEGER)")
+        data.to_sql('inventory', self.database, if_exists='replace', index=False)
         self.database.commit()
 
 
 
     def viewTable(self):
         """ Converts DB to readable table then returns it. """
+        if self.table == 'customer_orders':
+            cur = self.database.cursor()
+            con = self.database        
+            cur.execute("SELECT * FROM customer_orders")
+            df = pd.read_sql_query("SELECT * from customer_orders", con)
+            return(df)
 
-        cur = self.database.cursor()
-        con = self.database        
-        cur.execute("SELECT * FROM customer_orders")
-        df = pd.read_sql_query("SELECT * from customer_orders", con)
-        return(df)
+        elif self.table == 'inventory':
+            cur = self.database.cursor()
+            con = self.database        
+            cur.execute("SELECT * FROM inventory")
+            df = pd.read_sql_query("SELECT * from inventory", con)
+            return(df)
+
 
     def saveChanges(self):
         """ When called it saves any changes that were made to the DB."""
 
         self.database.commit()
+
 
     def find(self, date, email, loc, prod, qt):
         """ This function is used to return the ID given to it. find('key','entry')
@@ -83,63 +110,130 @@ class Ops():
         repo = pd.DataFrame(cur.fetchall(), columns=['date', 'cust_email', 'cust_location', 'product_id', 'product_quantity', 'trade_number'])
         print(repo)
         
+
     def add(self, new_entry):
         """ CRUD function, that inserts a series of variables into a new entry in the DB. """
-
-        query = 'INSERT INTO customer_orders(date, cust_email, cust_location, product_id, product_quantity, trade_number) VALUES(?, ?, ?, ?, ?, ? + 1)'
-
-        try: 
-            cur = self.cur
-            con = self.database
-            cur.execute('SELECT MAX(trade_number) FROM customer_orders')
-            val = cur.fetchone()
-            list(val)
-            for i in range(len(new_entry)):
-                if new_entry[i] == new_entry[5]:
-                    new_entry[i] = val[0]
-            cur.execute(query, new_entry)
-            con.commit()
         
-        except Error as e:
-            print(e)
+        if self.table == 'customer_orders':
+            #Add function for the customer orders table in the DB
+            query = 'INSERT INTO customer_orders(date, cust_email, cust_location, product_id, product_quantity, trade_number) VALUES(?, ?, ?, ?, ?, ? + 1)'
+            try: 
+                cur = self.cur
+                con = self.database
+                cur.execute('SELECT MAX(trade_number) FROM customer_orders')
+                val = cur.fetchone()
+                list(val)
+                for i in range(len(new_entry)):
+                    if new_entry[i] == new_entry[5]:
+                        new_entry[i] = val[0]
+                cur.execute(query, new_entry)
+                con.commit()
+        
+            except Error as e:
+                print(e)
             
-        finally:
-            if con:
-                con.close()
+            finally:
+                if con:
+                    con.close()
+        
+        elif self.table == 'inventory':
+            #Add function for the inventory table in the DB
+            query = 'INSERT INTO inventory(product_id, quantity, wholesale_cost, sale_price, supplier_id, entry_number) VALUES(?, ?, ?, ?, ?, ? + 1)'
+            try: 
+                cur = self.cur
+                con = self.database
+                cur.execute('SELECT MAX(entry_number) FROM inventory')
+                val = cur.fetchone()
+                list(val)
+                for i in range(len(new_entry)):
+                    if new_entry[i] == new_entry[5]:
+                        new_entry[i] = val[0]
+                cur.execute(query, new_entry)
+                con.commit()
+        
+            except Error as e:
+                print(e)
+            
+            finally:
+                if con:
+                    con.close()
+
 
     def edit(self, entry):
         """ This function edits the ID that is recived."""
-        query = "UPDATE customer_orders SET date = ?, cust_email = ?, cust_location = ?, product_id = ?, product_quantity = ? WHERE trade_number = ?"       
-        try:
-            cur = self.cur
-            con = self.database
-            cur.execute(query, entry)
-            con.commit()
         
-        except Error as e:
-            print(e)
+        if self.table == 'customer_orders':
+            #edit function for the customer orders table in the DB
+            query = "UPDATE customer_orders SET date = ?, cust_email = ?, cust_location = ?, product_id = ?, product_quantity = ? WHERE trade_number = ?"       
+            try:
+                cur = self.cur
+                con = self.database
+                cur.execute(query, entry)
+                con.commit()
+        
+            except Error as e:
+                print(e)
 
-        finally:
-            if con:
-                con.close()
+            finally:
+                if con:
+                    con.close()
+
+        elif self.table == 'inventory':
+            #edit function for the inventory table in the DB
+            query = "UPDATE inventory SET product_id = ?, quantity = ? , wholesale_cost = ?, sale_price = ?, supplier_id = ? WHERE entry_number = ?"       
+            try:
+                cur = self.cur
+                con = self.database
+                cur.execute(query, entry)
+                con.commit()
+        
+            except Error as e:
+                print(e)
+
+            finally:
+                if con:
+                    con.close()
+
 
     def delete(self, entry):
         """ This function deletes the ID currently being recieved. """
-        num = entry[5]
-        query = ('DELETE FROM customer_orders WHERE trade_number = ' + num )
-        print(query)
-        try:
-            cur = self.cur
-            con = self.database
-            cur.execute(query)
-            con.commit()
 
-        except Error as e:
-            print(e)
+        if self.table == 'customer_orders':
+            #delete function for the customer_orders table in the DB
+            num = entry[5]
+            query = ('DELETE FROM customer_orders WHERE trade_number = ' + num )
+            print(query)
+            try:
+                cur = self.cur
+                con = self.database
+                cur.execute(query)
+                con.commit()
+
+            except Error as e:
+                print(e)
         
-        finally:
-            if con:
-                con.close()
+            finally:
+                if con:
+                    con.close()
+
+        elif self.table == 'inventory':
+            #delete function for the inventory table in the DB
+            num = entry[5]
+            query = ('DELETE FROM inventory WHERE entry_number = ' + num )
+            print(query)
+            try:
+                cur = self.cur
+                con = self.database
+                cur.execute(query)
+                con.commit()
+
+            except Error as e:
+                print(e)
+        
+            finally:
+                if con:
+                    con.close()
+
 
     def exit(self):
         """ This function will close out of the DB. """

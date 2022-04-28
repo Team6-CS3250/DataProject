@@ -9,6 +9,7 @@ tkwindow.geometry('')
 tkwindow.title('Team 6 Database Login')
 tkwindow['background']='#a9c476'
 
+
 class frontend_GUI():
     """
     This class will be the front-end of the GUI, where users
@@ -121,9 +122,6 @@ class frontend_GUI():
         # Dashboard frame
         navFrame=Frame(self.employee_db, width=250, height=550, bg='#a9c476')
         navFrame.place(x=0, y=0)
-        #self.dbLabel = Label(self.employee_db, text = "Dashboard",font =("Helvetica",30), bg='#a9c476', height=2, padx=20)
-        #self.dbLabel.grid(row=0, column=0, pady=10)
-
 
         ''' Creating and Connecting the DB '''
 
@@ -162,8 +160,7 @@ class frontend_GUI():
         self.tree.configure(yscroll=scrollbar.set)
         scrollbar.grid(row = 0, column = 5, rowspan = 2, sticky='ns', pady = 10)
 
-
-        """ Creating buttons for dashboard """
+        ''' Creating buttons for dashboard '''
 
         #Db - product view
         self.dbButton = Button(self.employee_db, text="Refresh", font =("Helvetica", 20), command=lambda: self.dbTableRefresh())
@@ -181,41 +178,41 @@ class frontend_GUI():
         self.deleteButton = Button(self.employee_db, text="Delete", font =("Helvetica", 20), command=lambda: [self.db.delete(self.getValues()), self.dbTableRefresh()])
         self.deleteButton.grid(row=2, column=3, pady=10, columnspan=1)
 
-        #Save Products
-        self.deleteButton = Button(self.employee_db, text="Save", font =("Helvetica", 20), command=lambda: self.db.saveChanges())
-        self.deleteButton.grid(row=2, column=4, pady=10, columnspan=1)
+        #Tabletoggle button
+        self.tabletoggleButton = Button(self.employee_db, text="Table Toggle", font =("Helvetica", 20), command=lambda: [self.db.tableSwitch(), self.dbTableRefresh()])
+        self.tabletoggleButton.grid(row=2, column=4, pady=10, columnspan=1)
 
-        """ Creating entry feilds """ 
+        ''' Creating entry feilds ''' 
         
         #Product ID label & Entries
-        self.prodLabel = Label(self.employee_db, text = "Date")
-        self.prodLabel.grid(row=3, column=0, pady=10)
-        self.prodEntry = Entry(self.employee_db, width=20)
-        self.prodEntry.grid(row=4, column=0, padx=20)
+        self.val1Label = Label(self.employee_db, text = "Date")
+        self.val1Label.grid(row=3, column=0, pady=10)
+        self.val1Entry = Entry(self.employee_db, width=20)
+        self.val1Entry.grid(row=4, column=0, padx=20)
 
         #Qty Label
-        self.qtyLabel = Label(self.employee_db, text = "Customer Email")
-        self.qtyLabel.grid(row=3, column=1, pady=10)
-        self.qtyEntry = Entry(self.employee_db, width=20)
-        self.qtyEntry.grid(row=4, column=1, padx=20)
+        self.val2Label = Label(self.employee_db, text = "Customer Email")
+        self.val2Label.grid(row=3, column=1, pady=10)
+        self.val2Entry = Entry(self.employee_db, width=20)
+        self.val2Entry.grid(row=4, column=1, padx=20)
 
         #Whole Sale Label
-        self.wsLabel = Label(self.employee_db, text = "Location")
-        self.wsLabel.grid(row=3, column=2, pady=10)
-        self.wsEntry = Entry(self.employee_db, width=20)
-        self.wsEntry.grid(row=4, column=2, padx=20)
+        self.val3Label = Label(self.employee_db, text = "Location")
+        self.val3Label.grid(row=3, column=2, pady=10)
+        self.val3Entry = Entry(self.employee_db, width=20)
+        self.val3Entry.grid(row=4, column=2, padx=20)
 
         #Sale Price Label
-        self.spLabel = Label(self.employee_db, text = "Product ID")
-        self.spLabel.grid(row=3, column=3, pady=10)
-        self.spEntry = Entry(self.employee_db, width=20)
-        self.spEntry.grid(row=4, column=3, padx=20)
+        self.val4Label = Label(self.employee_db, text = "Product ID")
+        self.val4Label.grid(row=3, column=3, pady=10)
+        self.val4Entry = Entry(self.employee_db, width=20)
+        self.val4Entry.grid(row=4, column=3, padx=20)
 
         #Supplier ID Label
-        self.supLabel = Label(self.employee_db, text = "Product Quantity")
-        self.supLabel.grid(row=3, column=4, pady=10)
-        self.supEntry = Entry(self.employee_db, width=20)
-        self.supEntry.grid(row=4, column=4, padx=20, pady= 10)
+        self.val5Label = Label(self.employee_db, text = "Product Quantity")
+        self.val5Label.grid(row=3, column=4, pady=10)
+        self.val5Entry = Entry(self.employee_db, width=20)
+        self.val5Entry.grid(row=4, column=4, padx=20, pady= 10)
 
     def OnDoubleClick(self, event):
         #On double click, fill entryfields with values from selected item
@@ -223,26 +220,26 @@ class frontend_GUI():
 
         for i in item:
             #Extract values of the selected item
-            prod = str(self.tree.item(i,"values")[0]) 
-            qty = str(self.tree.item(i, "values")[1])
-            ws = str(self.tree.item(i, "values")[2])
-            sp = str(self.tree.item(i, "values")[3])
-            sup = str(self.tree.item(i, "values")[4])
-            num = str(self.tree.item(i, "values")[5])
+            val1 = str(self.tree.item(i,"values")[0])
+            val2 = str(self.tree.item(i, "values")[1])
+            val3 = str(self.tree.item(i, "values")[2])
+            val4 = str(self.tree.item(i, "values")[3])
+            val5 = str(self.tree.item(i, "values")[4])
+            val6 = str(self.tree.item(i, "values")[5])
 
             #Clear entry fields
-            self.prodEntry.delete(0, END)
-            self.qtyEntry.delete(0, END)
-            self.wsEntry.delete(0, END)
-            self.spEntry.delete(0, END)
-            self.supEntry.delete(0, END)
+            self.val1Entry.delete(0, END)
+            self.val2Entry.delete(0, END)
+            self.val3Entry.delete(0, END)
+            self.val4Entry.delete(0, END)
+            self.val5Entry.delete(0, END)
 
             #Insert the selected value into the entry fields
-            self.prodEntry.insert(END, prod)
-            self.qtyEntry.insert(END, qty)
-            self.wsEntry.insert(END, ws)
-            self.spEntry.insert(END, sp)
-            self.supEntry.insert(END, sup)
+            self.val1Entry.insert(END, val1)
+            self.val2Entry.insert(END, val2)
+            self.val3Entry.insert(END, val3)
+            self.val4Entry.insert(END, val4)
+            self.val5Entry.insert(END, val5)
 
     def dbTableRefresh(self):
         """ Add function to call for changing"""
@@ -258,45 +255,51 @@ class frontend_GUI():
             self.tree.insert("",0,text=index,values=list(row))
 
     def updateGetValues(self):
+        """ Extracts values for the Update function. """
         item = self.tree.selection()
         for i in item:
-            num = str(self.tree.item(i, "values")[5])
+            val6 = str(self.tree.item(i, "values")[5])
 
-        prod = self.prodEntry.get()
-        qty = self.qtyEntry.get()
-        ws = self.wsEntry.get()
-        sp = self.spEntry.get()
-        sup = self.supEntry.get()
-
-        entry = [prod, qty, ws, sp, sup, num]
+        val1 = self.val1Entry.get()
+        val2 = self.val2Entry.get()
+        val3 = self.val3Entry.get()
+        val4 = self.val4Entry.get()
+        val5 = self.val5Entry.get()
+        
+        #Format the values into list
+        entry = [val1, val2, val3, val4, val5, val6]
         print(entry)
         return entry
 
     def getValues(self):
+        """ Standard Extract values and return. """
         item = self.tree.selection()
         for i in item:
             #Extract values of the selected it
-            prod = str(self.tree.item(i,"values")[0]) 
-            qty = str(self.tree.item(i, "values")[1])
-            ws = str(self.tree.item(i, "values")[2])
-            sp = str(self.tree.item(i, "values")[3])
-            sup = str(self.tree.item(i, "values")[4])
-            num = str(self.tree.item(i, "values")[5])
+            val1 = str(self.tree.item(i,"values")[0]) 
+            val2 = str(self.tree.item(i, "values")[1])
+            val3 = str(self.tree.item(i, "values")[2])
+            val4 = str(self.tree.item(i, "values")[3])
+            val5 = str(self.tree.item(i, "values")[4])
+            val6 = str(self.tree.item(i, "values")[5])
         
-        
-        entry = [prod, qty, ws, sp, sup, num]
+        #Format the values into list
+        entry = [val1, val2, val3, val4, val5, val6]
         print(entry)
         return entry
 
     def addGetValues(self):
-        prod = self.prodEntry.get()
-        qty = self.qtyEntry.get()
-        ws = self.wsEntry.get()
-        sp = self.spEntry.get()
-        sup = self.supEntry.get()
-        num = 0
+        """ Extracts values from the input feilds to return to the add function. """
 
-        entry = [prod, qty, ws, sp, sup, num]
+        val1 = self.val1Entry.get()
+        val2 = self.val2Entry.get()
+        val3 = self.val3Entry.get()
+        val4 = self.val4Entry.get()
+        val5 = self.val5Entry.get()
+        val6 = 0
+
+        #Format the values into list
+        entry = [val1, val2, val3, val4, val5, val6]
         print(entry)
         return entry
 
