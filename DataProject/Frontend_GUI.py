@@ -31,7 +31,7 @@ class frontend_GUI():
         # Employee and customer button
         self.employeeButton = Button(main, text = "EMPLOYEE",bg='grey',font=("Helvetica",25), command=self.employeeLogin)
         self.employeeButton.grid(row=4, column=2,padx=10, pady=12, ipadx=15, ipady=15)
-        self.customerButton = Button(main, text = "CUSTOMER", bg='grey', font=("Helvetica",25))
+        self.customerButton = Button(main, text = "CUSTOMER", bg='grey', font=("Helvetica",25), command=self.cusWind)
         self.customerButton.grid(row=4, column=4, padx=10,pady=12, ipadx=15, ipady=15)
 
     def employeeLogin(self):
@@ -110,6 +110,23 @@ class frontend_GUI():
         # Creating button
         self.createButton = Button(self.newWin, text="Create Account", font=("Helvetica", 15), command=None) #command will store user information
         self.createButton.grid(row=8, column=1, pady=15)
+    
+    def cusWind(self):
+        """ Customer window will open on custmer button command, where customers 
+            will be able to interact with chatbot """
+        
+        self.cus_wind = Toplevel()
+        self.cus_wind.geometry('350x350')
+        self.cus_wind.title("Customer Service")
+        self.cus_wind.configure(bg='#a9c476')
+
+        # Creating Labels
+        self.csLabel = Label(self.cus_wind, text = "Customer Service", font =("Helvetica",30), bg='#a9c476' )
+        self.csLabel.grid(row=0, column=1, padx=20)
+
+        # Chatbot frame
+        chatFrame=Frame(self.cus_wind, width=250, height=250, bg='#a9c476')
+        chatFrame.grid(row = 1, column = 0, rowspan = 2, columnspan = 5, pady = 10)
 
     def navBar(self):
         """ Dashboard Window, where employees will be able to check/update/delete orders """
