@@ -61,10 +61,16 @@ class Ops():
         data.to_sql('inventory', self.database, if_exists='replace', index=False)
         self.database.commit()
 
+        cur = self.database.cursor()
+        cur.execute("CREATE TABLE IF NOT EXISTS userprofile(username TEXT, password TEXT, hash TEXT)")
+        data.to_sql('userprofile', self.database, if_exists='replace', index=False)
+        self.database.commit()
+
 
 
     def viewTable(self):
         """ Converts DB to readable table then returns it. """
+
         if self.table == 'customer_orders':
             cur = self.database.cursor()
             con = self.database        
@@ -86,29 +92,43 @@ class Ops():
         self.database.commit()
 
 
-    def find(self, date, email, loc, prod, qt):
-        """ This function is used to return the ID given to it. find('key','entry')
-        Key -> date, cust_email, cust_location, product_id, product_quantity
-        Entry -> the value/s that you are looking for.
+    def find(self, table, value):
+        """ The find function takes the table and value called for
+        and customizes the SELECT command to find all entries from 
+        The table called for.
+
+        Table > customer_orders/inventory
+        value > any part of string you are looking for.
         """
+
         cur = self.cur
         con = self.database
-        if key == "date":
-            query = cur.execute("SELECT date, cust_email, cust_location, product_id, product_quantity FROM customer_orders WHERE date=?", [entry])
-        elif key == "cust_email":
-            query = cur.execute("SELECT date, cust_email, cust_location, product_id, product_quantity FROM customer_orders WHERE cust_email=?", [entry])
-        elif key == "cust_location":
-            query = cur.execute("SELECT date, cust_email, cust_location, product_id, product_quantity FROM customer_orders WHERE cust_location=?", [entry])
-        elif key == "product_id":
-            query = cur.execute("SELECT date, cust_email, cust_location, product_id, product_quantity FROM customer_orders WHERE product_id=?", [entry])
-        elif key == "product_quantity":
-            query = cur.execute("SELECT date, cust_email, cust_location, product_id, product_quantity FROM customer_orders WHERE product_quantity=?", [entry])
+        pd.set_option('display.max_columns', None)
+        pd.set_option('display.max_rows', None)
+
+
+        #Locate value from the customer_orders table
+        if table == 'customer_orders':
+            query = "SELECT date, cust_email, cust_location, product_id, product_quantity FROM customer_orders WHERE date LIKE '?' OR cust_email LIKE '?' OR cust_location LIKE '?' OR product_id LIKE '?' OR product_quantity LIKE '?'"
+            query = query.replace('?',('%' + value + '%'))
+            cur.execute(query)
+            repo = pd.DataFrame(cur.fetchall(), columns=['Date', 'Customer Email', 'Customer Location', 'Product ID', 'Product Quantity'])
+            print(repo)
+            return repo
+
+        #locate value from the inventory table
+        elif table == 'inventory':
+            query = "SELECT DISTINCT product_id, quantity, wholesale_cost, sale_price, supplier_id FROM inventory WHERE product_id LIKE '?' OR quantity LIKE '?' OR wholesale_cost LIKE '?' OR sale_price LIKE '?' OR supplier_id LIKE '?'"
+            query = query.replace('?',('%' + value + '%'))
+            cur.execute(query)
+            repo = pd.DataFrame(cur.fetchall(), columns=['Product ID', 'Quantity', 'Wholesale Cost', 'Sale Price', 'Supplier'])
+            print(repo)
+            return repo
+
+        #pass if an error is made
         else:
-            print("Error: Key is out out of bounds.")
-            pass
-        
-        repo = pd.DataFrame(cur.fetchall(), columns=['date', 'cust_email', 'cust_location', 'product_id', 'product_quantity', 'trade_number'])
-        print(repo)
+            print("Error: table is out out of bounds.")
+            return       
         
 
     def add(self, new_entry):

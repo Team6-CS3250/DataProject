@@ -9,6 +9,21 @@ tkwindow.geometry('')
 tkwindow.title('Team 6 Database Login')
 tkwindow['background']='#a9c476'
 
+db = Operations.Ops('inventory.db')
+i = 1
+while i == 1:
+    table = input("What table are you looking for?")
+    value = input("What value are you looking for?")
+    if value == 'e':
+        break
+    elif table == 'e':
+        break
+    else:
+        db.find(table, value)
+
+
+#db.formatTable()
+
 
 class frontend_GUI():
     """
