@@ -9,18 +9,6 @@ tkwindow.geometry('')
 tkwindow.title('Team 6 Database Login')
 tkwindow['background']='#a9c476'
 
-db = Operations.Ops('inventory.db')
-i = 1
-while i == 1:
-    table = input("What table are you looking for?")
-    value = input("What value are you looking for?")
-    if value == 'e':
-        break
-    elif table == 'e':
-        break
-    else:
-        db.find(table, value)
-
 
 #db.formatTable()
 
@@ -177,8 +165,8 @@ class frontend_GUI():
 
         ''' Creating buttons for dashboard '''
 
-        #Db - product view
-        self.dbButton = Button(self.employee_db, text="Refresh", font =("Helvetica", 20), command=lambda: self.dbTableRefresh())
+        #Reports Pulls up reports window
+        self.dbButton = Button(self.employee_db, text="Reports", font =("Helvetica", 20), command=lambda: [self.reports(), self.dbTableRefresh()])
         self.dbButton.grid(row=2, column=0, pady=10, columnspan=1)
         
         #Add products
@@ -317,6 +305,44 @@ class frontend_GUI():
         entry = [val1, val2, val3, val4, val5, val6]
         print(entry)
         return entry
+
+    def reports(self):
+        """ Creates window to display the top 5 buyers and products."""
+        self.reports = Toplevel()
+        self.reports.geometry('')
+        self.reports.title("Overall Report")
+        self.reports.configure(bg='#a9c476')
+
+        # Dashboard frame
+        navFrame=Frame(self.reports, width=250, height=550, bg='#a9c476')
+        navFrame.place(x=0, y=0)
+
+        #Top Buyer lables
+        self.topBuyersLabel = Label(self.reports, text = "Top Buyers", font =("Helvetica",30))
+        self.topBuyersLabel.grid(row=0, column=0, pady=15)
+        self.topBuyersLabel = Label(self.reports, text = self.db.findTopFive('customer_orders'), font =("Helvetica",20))
+        self.topBuyersLabel.grid(row=1, column=0, pady=15)
+
+        #Top Product lables
+        self.topProductsLabel = Label(self.reports, text = "Top Products", font =("Helvetica",30))
+        self.topProductsLabel.grid(row=6, column=0, pady=15)
+        self.topBuyersLabel = Label(self.reports, text = self.db.findTopFive('inventory'), font =("Helvetica",20))
+        self.topBuyersLabel.grid(row=7, column=0, pady=15)
+
+        #df = pd.DataFrame(sample)
+        #cols = list(df.columns)
+
+        #tree = ttk.Treeview(root)
+        #tree.pack()
+        #tree["columns"] = cols
+        #for i in cols:
+        #    tree.column(i, anchor="w")
+        #    tree.heading(i, text=i, anchor='w')
+
+        #for index, row in df.iterrows():
+        #    tree.insert("",0,text=index,values=list(row))
+
+
 
 gui = frontend_GUI(tkwindow)
 tkwindow.mainloop()
