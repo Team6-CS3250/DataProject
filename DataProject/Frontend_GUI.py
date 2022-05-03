@@ -9,10 +9,6 @@ tkwindow.geometry('')
 tkwindow.title('Team 6 Database Login')
 tkwindow['background']='#a9c476'
 
-
-#db.formatTable()
-
-
 class frontend_GUI():
     """
     This class will be the front-end of the GUI, where users
@@ -328,19 +324,6 @@ class frontend_GUI():
         self.topProductsLabel.grid(row=6, column=0, pady=15)
         self.topBuyersLabel = Label(self.reports, text = self.db.findTopFive('inventory'), font =("Helvetica",20))
         self.topBuyersLabel.grid(row=7, column=0, pady=15)
-
-        #df = pd.DataFrame(sample)
-        #cols = list(df.columns)
-
-        #tree = ttk.Treeview(root)
-        #tree.pack()
-        #tree["columns"] = cols
-        #for i in cols:
-        #    tree.column(i, anchor="w")
-        #    tree.heading(i, text=i, anchor='w')
-
-        #for index, row in df.iterrows():
-        #    tree.insert("",0,text=index,values=list(row))
 
 
 
