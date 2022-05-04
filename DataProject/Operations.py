@@ -92,7 +92,7 @@ class Ops():
         self.database.commit()
 
 
-    def find(self, table, value):
+    def findAny(self, table, value):
         """ The find function takes the table and value called for
         and customizes the SELECT command to find all entries from 
         The table called for.
@@ -124,6 +124,62 @@ class Ops():
             repo = pd.DataFrame(cur.fetchall(), columns=['Product ID', 'Quantity', 'Wholesale Cost', 'Sale Price', 'Supplier'])
             print(repo)
             return repo
+
+        #pass if an error is made
+        else:
+            print("Error: table is out out of bounds.")
+            return       
+
+
+    def findTopFive(self, table):
+        """ The find function takes the table and value called for
+        and customizes the SELECT command to find all entries from 
+        The table called for.
+
+        Table > customer_orders/inventory
+        value > any part of string you are looking for.
+        """
+
+        cur = self.cur
+        con = self.database
+        pd.set_option('display.max_columns', None)
+
+        #Locate value from the customer_orders table
+        if table == 'customer_orders':
+            #select price from mobile_sales_details order by price desc limit 5
+            query = "SELECT cust_email, SUM(product_quantity) FROM customer_orders GROUP BY cust_email ORDER BY SUM(product_quantity) DESC LIMIT 5"
+            cur.execute(query)
+            repo = pd.DataFrame(cur.fetchall(), columns=['Customer Email', 'Product Quantity'])
+            print(repo)
+            return repo
+
+        #locate value from the inventory table
+        elif table == 'inventory':
+            query = "SELECT product_id, SUM(product_quantity) FROM customer_orders GROUP BY product_id ORDER BY SUM(product_quantity) DESC LIMIT 5"
+            cur.execute(query)
+            repo = cur.fetchall()
+            
+            dicts = {}
+            keys = [0,1,2,3,4]
+            values = []
+            
+            for x in repo:
+                query = "SELECT sale_price FROM inventory WHERE product_id= '?'"
+                query = query.replace('?',x[0])
+                cur.execute(query)
+                price = cur.fetchone()[0]
+                bepo = price * x[1]
+                bepo = str(round(bepo, 2))
+                list = x[0],bepo
+                values.append(list)
+
+            for i in range(len(keys)):
+                dicts[keys[i]] = values[i]
+            
+            xpo = pd.DataFrame.from_dict(data= dicts, orient='index', columns=['Product ID', 'Product Quantity'])
+
+            print(xpo)
+            return xpo
 
         #pass if an error is made
         else:
