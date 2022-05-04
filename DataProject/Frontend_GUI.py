@@ -3,11 +3,18 @@ import Operations
 import tkinter as tk
 from tkinter import *
 import tkinter.ttk
+import Chatbot
 
 tkwindow = Tk()
 tkwindow.geometry('')
 tkwindow.title('Team 6 Database Login')
 tkwindow['background']='#a9c476'
+#Color for text in chatbot
+TEXT_COLOR = "#EAECEE"
+#Bold font
+FONT_BOLD = "Helvetica 13 bold"
+#Color for message entry field in chatbot
+BG_GRAY = "#ABB2B9"
 
 class frontend_GUI():
     """
@@ -115,17 +122,72 @@ class frontend_GUI():
             will be able to interact with chatbot """
         
         self.cus_wind = Toplevel()
-        self.cus_wind.geometry('350x350')
+        self.cus_wind.geometry('470x550')
+        #self.cus_wind.resizeable(width=False, height=False)#Trying to stop resizing of window
         self.cus_wind.title("Customer Service")
         self.cus_wind.configure(bg='#a9c476')
 
         # Creating Labels
         self.csLabel = Label(self.cus_wind, text = "Customer Service", font =("Helvetica",30), bg='#a9c476' )
         self.csLabel.grid(row=0, column=1, padx=20)
-
+        
         # Chatbot frame
         chatFrame=Frame(self.cus_wind, width=250, height=250, bg='#a9c476')
         chatFrame.grid(row = 1, column = 0, rowspan = 2, columnspan = 5, pady = 10)
+
+        #Tiny divider between welcome label and text widget
+        line = Label(self.cus_wind, width=450, bg='#a9c476')
+        line.place(relwidth=1,rely=0.07,relheight=0.012)
+
+        #Creating text widget
+        self.text_widget = Text(self.cus_wind, width=20, height=2, bg='#a9c476', fg=TEXT_COLOR, font=('Helvetica', 16), padx=5, pady=5)
+        self.text_widget.place(relheight=0.745,relwidth=1,rely=0.08)
+        self.text_widget.configure(cursor="arrow", state=DISABLED)
+
+        #Scroll bar for text widget
+        scrollbar = Scrollbar(self.text_widget)
+        scrollbar.place(relheight=1,relx=0.974)
+        scrollbar.configure(command=self.text_widget.yview)
+
+        #Bottom label
+        bottom_label = Label(self.cus_wind, bg=BG_GRAY, height=80)
+        bottom_label.place(relwidth=1, rely=0.825)
+
+        #Message entry box
+        self.msg_entry = Entry(bottom_label, bg='#2C3E50', fg=TEXT_COLOR, font=('Helvetica',16))
+        self.msg_entry.place(relwidth=0.74,relheight=0.06,rely=0.008,relx=0.011)
+        self.msg_entry.focus()
+        self.msg_entry.bind("<Return>", self._on_enter_pressed)
+
+        #Send button
+        send_button = Button(bottom_label, text="Send", font=FONT_BOLD, width=20,bg=BG_GRAY,command=lambda: self._on_enter_pressed(None))
+        send_button.place(relx=0.77,rely=0.008,relheight=0.06,relwidth=0.22)
+
+
+    #Method for _on_enter_pressed
+    def _on_enter_pressed(self, event):
+        msg = self.msg_entry.get()
+        self._insert_message(msg, "You")
+
+    #Method for inserting message into chat window
+    def _insert_message(self,msg,sender):
+        if not msg:
+            return
+        
+        bot_name="Lucky"
+        self.msg_entry.delete(0,END)
+        msg1= f"{sender}: {msg}\n"
+        self.text_widget.configure(state=NORMAL)
+        self.text_widget.insert(END, msg1)
+        self.text_widget.configure(state=DISABLED)
+
+        msg2= f"{bot_name}: {Chatbot.chat(msg)}\n"
+        self.text_widget.configure(state=NORMAL)
+        self.text_widget.insert(END, msg2)
+        self.text_widget.configure(state=DISABLED)
+
+        self.text_widget.see(END)
+
 
     def navBar(self):
         """ Dashboard Window, where employees will be able to check/update/delete orders """
