@@ -3,6 +3,7 @@ import Operations
 import tkinter as tk
 from tkinter import *
 import tkinter.ttk
+import smtplib
 
 tkwindow = Tk()
 tkwindow.geometry('')
@@ -32,6 +33,63 @@ class frontend_GUI():
         self.employeeButton.grid(row=4, column=2,padx=10, pady=12, ipadx=15, ipady=15)
         self.customerButton = Button(main, text = "CUSTOMER", bg='grey', font=("Helvetica",25), command=self.cusWind)
         self.customerButton.grid(row=4, column=4, padx=10,pady=12, ipadx=15, ipady=15)
+
+        # Help button
+        helpButton = Button(main, text="Help", command = self.contactUs)
+        helpButton.grid(row = 8, column = 3,pady =20)
+
+    def submit(self):
+        """ When submit button is pressed in the contact us from, a message is sent to our 
+            customer service email """
+
+        email = StringVar()
+        message = StringVar()
+        emailInfo = email.get()
+        messageInfo = message.get()
+        print(emailInfo,messageInfo)
+
+        # Recipient Email adress
+        sender_email = "timesthecharm.help@gmail.com"
+        sender_password = "CS3250TTC"
+        server = smtplib.SMTP('smtp.gmail.com',587)
+        server.starttls()
+        server.login(sender_email,sender_password)
+
+        # Prints in terminal
+        print("Login successful")
+        server.sendmail(sender_email,email,message)
+        print("Message sent")
+
+        # Deletes contents when message is successfully sent
+        email.delete(0,END)
+        message.delete(0,END)
+
+    def contactUs(self):
+        " When help button is pressed, a new window opens for customer service"
+
+        # Creating window
+        self.contact_us = Toplevel()
+        self.contact_us.geometry("500x300")
+        self.contact_us.title("Contact us")
+
+        # Creating labels
+        help = Label(self.contact_us,text="SEND US AN EMAIL !",bg="#a9c476",fg="white",width="500",height="3",font=("Helvetica",15), padx=10)
+        help.pack()
+        emailLabel = Label(self.contact_us,text="Recipient Address:")
+        emailLabel.place(x=15, y=70)
+        messageLabel = Label(self.contact_us, text="Message:")
+        messageLabel.place(x=15,y=140)
+
+        # Creating Entries
+        emailEntry = Entry(self.contact_us, width='30')
+        emailEntry.place(x=15,y=100)
+        messageEntry = Entry(self.contact_us,width="30")
+        messageEntry.place(x=15,y=180)
+
+        # Creating submit button
+        submitButton = Button(self.contact_us,text="Submit",command=self.submit,width="30",height="2",bg="grey")
+        submitButton.place(x=15, y=220)
+
 
     def employeeLogin(self):
         """ Used for the employee button command, displays eployee login page"""
@@ -342,6 +400,9 @@ class frontend_GUI():
         self.topBuyersLabel = Label(self.reports, text = self.db.findTopFive('inventory'), font =("Helvetica",20))
         self.topBuyersLabel.grid(row=7, column=0, pady=15)
 
+        # Button for closing
+        exit_button = Button(self.reports, text="Close", command =self.reports.destroy, font='10')
+        exit_button.grid(row=8, column =0)
 
 
 gui = frontend_GUI(tkwindow)
